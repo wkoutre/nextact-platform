@@ -10,45 +10,75 @@ export const metadata: Metadata = {
 const MODULES = [
   {
     number: 1,
-    name: "V\u00e4rderingar",
+    name: "Analys",
     description:
-      "Uppt\u00e4ck vad som verkligen driver dig \u2014 som idrottare och m\u00e4nniska. V\u00e4rderingar \u00e4r kompassnålen som styr dina handlingar.",
+      "Kartlägg din nuvarande idrottssituation, identifiera mål och förstå dina förutsättningar för utveckling.",
   },
   {
     number: 2,
-    name: "Acceptans",
+    name: "Värderad Riktning",
     description:
-      "L\u00e4r dig att m\u00f6ta sv\u00e5ra k\u00e4nslor som nerv\u00f6sitet och frustration utan att fly. Acceptans \u00e4r inte att ge upp \u2014 det \u00e4r att sluta k\u00e4mpa emot.",
+      "Utforska din värderade riktning och dess roll för din måluppfyllelse. Börja bygga din tuffhetsmodell.",
   },
   {
     number: 3,
-    name: "Defusion",
+    name: "Utforska Hinder",
     description:
-      "Skapa avst\u00e5nd till negativa tankar. L\u00e4r dig att tankar \u00e4r bara tankar, inte sanningar du m\u00e5ste f\u00f6lja.",
+      "Förstå hur hjärnan fungerar och hur tankar och känslor skapar prestationshinder.",
   },
   {
     number: 4,
-    name: "N\u00e4rvarande \u00d6gonblick",
+    name: "Dina Beteenden",
     description:
-      "Tr\u00e4na din f\u00f6rm\u00e5ga till fokus och n\u00e4rvaro \u2014 b\u00e5de under press och i vardagen. N\u00e4rvaro \u00e4r grunden f\u00f6r topprestationer.",
+      "Analysera dina beteenden i olika situationer och identifiera nyckelbeteenden att träna.",
   },
   {
     number: 5,
-    name: "Sj\u00e4lvet som Kontext",
+    name: "Våga Utmana",
     description:
-      "Du \u00e4r mer \u00e4n dina resultat. Bygg en stabil sj\u00e4lvbild som inte skakas av motg\u00e5ngar eller misslyckanden.",
+      "Utforska mental styrka genom varierade situationer. Skapa din egen våga-lista.",
   },
   {
     number: 6,
-    name: "Engagerat Handlande",
+    name: "Fokusera Mera",
     description:
-      "Koppla ihop dina v\u00e4rderingar med konkreta handlingar. Engagerat handlande \u00e4r att agera trots obehag.",
+      "Fördjupade fokusövningar av ökande svårighetsgrad för träning och tävling.",
   },
   {
     number: 7,
-    name: "Integration",
+    name: "Målsättning & Utvärdering",
     description:
-      "Samla alla verktyg till en h\u00e5llbar mental tr\u00e4ningsrutin som forts\u00e4tter att utvecklas efter programmet.",
+      "Effektiv målsättning och utvärdering. Sätt upp mål och mät din prestation.",
+  },
+  {
+    number: 8,
+    name: "Hitta Balansen",
+    description:
+      "Uppdatera tuffhetsmodellen med svårare situationer. Utforska balans mellan idrott och privatliv.",
+  },
+  {
+    number: 9,
+    name: "Återhämtning",
+    description:
+      "Balans mellan träning och vila. Hållbar träningsplanering, kost och sömn.",
+  },
+  {
+    number: 10,
+    name: "Din Inre Kritiker",
+    description:
+      "Utveckla medvetenhet om ditt inre självprat och skriv om din berättelse konstruktivt.",
+  },
+  {
+    number: 11,
+    name: "Hantera Motgångar",
+    description:
+      "Strategier för att hantera motgångar och omvandla dem till utvecklingsmöjligheter.",
+  },
+  {
+    number: 12,
+    name: "Utvärdering och Planering",
+    description:
+      "Sammanfatta din utveckling och skapa en plan för din framtida idrottskarriär.",
   },
 ];
 
@@ -126,16 +156,16 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* 7 modules */}
+      {/* 12 modules */}
       <section className="bg-white py-20 md:py-28">
         <div className="mx-auto max-w-5xl px-6">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="font-heading text-2xl font-bold text-navy md:text-3xl">
-              Sju steg till mental styrka
+              Steg för steg till mental styrka
             </h2>
             <p className="mt-4 text-charcoal">
-              Programmet \u00e4r uppbyggt kring sju moduler. Varje steg bygger
-              p\u00e5 det f\u00f6rra och ger dig nya verktyg.
+              Programmet är uppbyggt kring 12 moduler. Varje steg bygger på det
+              förra och ger dig nya verktyg.
             </p>
           </div>
 

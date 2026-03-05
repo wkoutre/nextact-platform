@@ -69,7 +69,7 @@ CREATE TABLE public.modules (
   program_id UUID REFERENCES public.programs(id) ON DELETE CASCADE,
   title TEXT NOT NULL,
   description TEXT,
-  act_process TEXT CHECK (act_process IN ('values', 'acceptance', 'defusion', 'present_moment', 'self_as_context', 'committed_action', 'integration')),
+  act_process TEXT,
   icon TEXT,
   color_theme TEXT,
   "order" INT NOT NULL DEFAULT 0,

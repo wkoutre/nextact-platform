@@ -31,7 +31,7 @@ const TIERS: PricingTier[] = [
     period: "/\u00e5r",
     description: "Fullst\u00e4ndig tillg\u00e5ng till hela programmet.",
     features: [
-      "Alla 7 moduler + \u00f6vningar",
+      "Alla 12 moduler + övningar",
       "50 AI-coach meddelanden/dag",
       "Detaljerad framstegsrapport",
       "Str\u00e5k-tracker med freeze",

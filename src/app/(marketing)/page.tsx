@@ -18,39 +18,66 @@ export const metadata: Metadata = {
 const modules = [
   {
     number: 1,
-    name: "Värderingar",
+    name: "Analys",
     description:
-      "Upptäck vad som verkligen driver dig som idrottare och människa.",
+      "Kartlägg din nuvarande idrottssituation och sätt dina utvecklingsmål.",
   },
   {
     number: 2,
-    name: "Acceptans",
-    description: "Lär dig hantera svåra känslor utan att fly från dem.",
+    name: "Värderad Riktning",
+    description:
+      "Utforska din värderade riktning och börja bygga din tuffhetsmodell.",
   },
   {
     number: 3,
-    name: "Defusion",
-    description: "Skapa distans till negativa tankar som begränsar dig.",
+    name: "Utforska Hinder",
+    description: "Förstå hur tankar och känslor skapar prestationshinder.",
   },
   {
     number: 4,
-    name: "Närvarande Ögonblick",
-    description: "Träna fokus och närvaro under press och i vardagen.",
+    name: "Dina Beteenden",
+    description: "Analysera dina beteenden och identifiera nyckelbeteenden.",
   },
   {
     number: 5,
-    name: "Självet som Kontext",
-    description: "Se bortom dina prestationer — du är mer än dina resultat.",
+    name: "Våga Utmana",
+    description: "Utmana dig själv i nya situationer och bygg mental styrka.",
   },
   {
     number: 6,
-    name: "Engagerat Handlande",
-    description: "Koppla ihop dina värderingar med konkreta handlingar.",
+    name: "Fokusera Mera",
+    description: "Fördjupade fokusövningar för träning och tävling.",
   },
   {
     number: 7,
-    name: "Integration",
-    description: "Samla alla verktyg till en hållbar mental träningsrutin.",
+    name: "Målsättning",
+    description: "Effektiv målsättning och utvärdering av din prestation.",
+  },
+  {
+    number: 8,
+    name: "Hitta Balansen",
+    description: "Balans mellan idrott och privatliv i en krävande vardag.",
+  },
+  {
+    number: 9,
+    name: "Återhämtning",
+    description: "Hållbar träning med rätt vila, kost och sömn.",
+  },
+  {
+    number: 10,
+    name: "Din Inre Kritiker",
+    description: "Skriv om ditt inre självprat från kritik till stöd.",
+  },
+  {
+    number: 11,
+    name: "Hantera Motgångar",
+    description: "Vänd motgångar till utvecklingsmöjligheter.",
+  },
+  {
+    number: 12,
+    name: "Utvärdering",
+    description:
+      "Sammanfatta din utveckling och planera din framtid som idrottare.",
   },
 ];
 
@@ -170,7 +197,7 @@ export default function HomePage() {
             aria-hidden="true"
           />
           <div>
-            <p className="font-heading text-2xl font-bold text-navy">7</p>
+            <p className="font-heading text-2xl font-bold text-navy">12</p>
             <p className="mt-1 text-sm text-charcoal">Strukturerade moduler</p>
           </div>
           <div
@@ -189,10 +216,10 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-6">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="font-heading text-3xl font-bold tracking-tight text-navy md:text-4xl">
-              Sju steg till mental styrka
+              Steg för steg till mental styrka
             </h2>
             <p className="mt-4 text-lg text-charcoal">
-              Programmet är uppbyggt kring sju moduler baserade på ACT — varje
+              Programmet är uppbyggt kring 12 moduler baserade på ACT — varje
               steg bygger på det förra.
             </p>
           </div>
