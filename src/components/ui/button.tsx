@@ -11,17 +11,27 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  primary:
-    "bg-primary text-white hover:bg-primary-hover active:brightness-95 shadow-sm shadow-primary/20",
-  secondary:
-    "border border-primary text-primary hover:bg-primary/5 active:bg-primary/10",
-  ghost: "text-charcoal hover:bg-navy/5 active:bg-navy/10",
+  primary: [
+    "bg-navy text-white",
+    "hover:-translate-y-px hover:shadow-md hover:shadow-navy/15",
+    "active:translate-y-0 active:shadow-sm",
+  ].join(" "),
+  secondary: [
+    "border border-navy/20 text-navy bg-transparent",
+    "hover:bg-navy hover:text-white hover:border-navy",
+    "active:bg-navy/90",
+  ].join(" "),
+  ghost: [
+    "text-navy bg-transparent",
+    "hover:underline hover:underline-offset-4 hover:decoration-1",
+    "active:text-navy/70",
+  ].join(" "),
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: "px-4 py-2 text-sm rounded-[3rem]",
-  md: "px-6 py-3 text-base rounded-[3rem]",
-  lg: "px-8 py-4 text-lg rounded-[4rem]",
+  sm: "px-4 py-1.5 text-xs rounded-lg",
+  md: "px-5 py-2.5 text-sm rounded-lg",
+  lg: "px-7 py-3 text-sm rounded-lg",
 };
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -41,10 +51,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled}
         className={`
-          inline-flex items-center justify-center font-heading font-semibold
+          inline-flex items-center justify-center
+          font-heading font-semibold tracking-wide uppercase
           transition-all duration-200 ease-out cursor-pointer
-          focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary
-          disabled:opacity-50 disabled:pointer-events-none
+          focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-navy
+          disabled:opacity-40 disabled:pointer-events-none
           ${variantStyles[variant]}
           ${sizeStyles[size]}
           ${className}

@@ -101,18 +101,18 @@ const testimonials = [
 
 const steps = [
   {
-    number: "1",
+    number: "01",
     title: "Skapa konto",
     description:
       "Registrera dig på under en minut. Ingen kreditkortsinformation krävs.",
   },
   {
-    number: "2",
+    number: "02",
     title: "Gör dagliga övningar",
     description: "Korta, evidensbaserade lektioner anpassade för idrottare.",
   },
   {
-    number: "3",
+    number: "03",
     title: "Utvecklas med AI-coachen",
     description:
       "Få personlig vägledning och reflektera kring din mentala träning.",
@@ -123,120 +123,90 @@ export default function HomePage() {
   return (
     <>
       {/* ───── Hero ───── */}
-      <section className="relative overflow-hidden bg-navy">
-        {/* Decorative background shapes */}
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -right-32 -top-32 h-[500px] w-[500px] rounded-full bg-primary/8 blur-3xl" />
-          <div className="absolute -left-24 bottom-0 h-[400px] w-[400px] rounded-full bg-cyan/6 blur-3xl" />
-          {/* Subtle grid pattern */}
-          <div
-            className="absolute inset-0 opacity-[0.03]"
-            style={{
-              backgroundImage:
-                "linear-gradient(rgba(255,255,255,.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.4) 1px, transparent 1px)",
-              backgroundSize: "64px 64px",
-            }}
-          />
-        </div>
+      <section className="min-h-screen bg-white">
+        <div className="mx-auto max-w-7xl px-6 pt-40 pb-24 md:pt-48 md:pb-32 lg:pt-56">
+          <div className="grid grid-cols-1 gap-16 lg:grid-cols-5 lg:items-end">
+            {/* Left — 60% */}
+            <div className="lg:col-span-3">
+              <h1 className="font-heading text-5xl font-bold leading-[0.95] tracking-tight text-navy sm:text-6xl md:text-7xl lg:text-8xl">
+                Mental
+                <br />
+                styrka
+              </h1>
+              <p className="mt-4 font-heading text-2xl font-light text-charcoal sm:text-3xl md:text-4xl">
+                för idrottare
+              </p>
+              <p className="mt-8 max-w-md text-base leading-relaxed text-charcoal md:text-lg">
+                Evidensbaserad mental träning byggt på ACT. Strukturerat
+                program, personlig AI-coachning och verktyg som fungerar under
+                press.
+              </p>
+              <div className="mt-10">
+                <Link
+                  href="/registrera"
+                  className="inline-flex items-center rounded-none bg-navy px-8 py-4 font-heading text-base font-semibold tracking-wide text-white transition-colors hover:bg-charcoal"
+                >
+                  Kom igång
+                </Link>
+              </div>
+            </div>
 
-        <div className="relative mx-auto max-w-5xl px-6 pb-28 pt-24 md:pb-36 md:pt-32">
-          <p className="mb-4 text-sm font-semibold uppercase tracking-widest text-cyan font-heading">
-            Evidensbaserad mental träning
-          </p>
-          <h1 className="max-w-3xl font-heading text-4xl font-bold leading-[1.1] tracking-tight text-white md:text-6xl">
-            Mental träning som <span className="text-primary">förändrar</span>{" "}
-            ditt spel
-          </h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/60">
-            Next Act hjälper idrottare att bygga mental styrka genom
-            evidensbaserade övningar, AI-coachning och en strukturerad
-            programväg — byggt på ACT.
-          </p>
-
-          <div className="mt-10 flex flex-wrap items-center gap-4">
-            <Link
-              href="/registrera"
-              className="inline-flex items-center rounded-[3rem] bg-primary px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:bg-primary-hover hover:shadow-xl hover:shadow-primary/30 font-heading"
-            >
-              Kom igång gratis
-            </Link>
-            <Link
-              href="/om-programmet"
-              className="inline-flex items-center rounded-[3rem] px-6 py-4 text-base font-medium text-white/70 transition-colors hover:text-white font-heading"
-            >
-              Läs mer om programmet
-              <svg
-                className="ml-2 h-4 w-4"
-                viewBox="0 0 16 16"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M3 8h10M9 4l4 4-4 4" />
-              </svg>
-            </Link>
-          </div>
-        </div>
-
-        {/* Angled bottom divider */}
-        <div className="absolute bottom-0 left-0 right-0 h-16 bg-off-white [clip-path:polygon(0_100%,100%_0,100%_100%)]" />
-      </section>
-
-      {/* ───── Trust Indicators ───── */}
-      <section className="bg-off-white py-12">
-        <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-8 px-6 text-center md:gap-16">
-          <div>
-            <p className="font-heading text-2xl font-bold text-navy">ACT</p>
-            <p className="mt-1 text-sm text-charcoal">Evidensbaserad metod</p>
-          </div>
-          <div
-            className="hidden h-8 w-px bg-light-gray md:block"
-            aria-hidden="true"
-          />
-          <div>
-            <p className="font-heading text-2xl font-bold text-navy">12</p>
-            <p className="mt-1 text-sm text-charcoal">Strukturerade moduler</p>
-          </div>
-          <div
-            className="hidden h-8 w-px bg-light-gray md:block"
-            aria-hidden="true"
-          />
-          <div>
-            <p className="font-heading text-2xl font-bold text-navy">AI</p>
-            <p className="mt-1 text-sm text-charcoal">Personlig coachning</p>
+            {/* Right — 40%, editorial data element */}
+            <div className="lg:col-span-2 lg:text-right">
+              <p className="font-heading text-[8rem] font-bold leading-none tracking-tighter text-off-white-alt sm:text-[10rem] lg:text-[12rem]">
+                12
+              </p>
+              <p className="mt-2 font-heading text-lg font-medium uppercase tracking-widest text-light-gray">
+                moduler
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ───── Program Overview ───── */}
-      <section className="bg-off-white py-24 md:py-32">
-        <div className="mx-auto max-w-6xl px-6">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="font-heading text-3xl font-bold tracking-tight text-navy md:text-4xl">
-              Steg för steg till mental styrka
-            </h2>
-            <p className="mt-4 text-lg text-charcoal">
-              Programmet är uppbyggt kring 12 moduler baserade på ACT — varje
-              steg bygger på det förra.
-            </p>
-          </div>
+      {/* ───── Evidence Strip ───── */}
+      <section className="border-y border-light-gray/40 bg-white">
+        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-4 px-6 py-5 sm:flex-row sm:items-center">
+          <span className="font-body text-xs font-medium uppercase tracking-[0.25em] text-charcoal">
+            ACT-baserad metod
+          </span>
+          <span
+            className="hidden h-px w-12 bg-light-gray sm:block"
+            aria-hidden="true"
+          />
+          <span className="font-body text-xs font-medium uppercase tracking-[0.25em] text-charcoal">
+            12 strukturerade moduler
+          </span>
+          <span
+            className="hidden h-px w-12 bg-light-gray sm:block"
+            aria-hidden="true"
+          />
+          <span className="font-body text-xs font-medium uppercase tracking-[0.25em] text-charcoal">
+            Personlig AI-coachning
+          </span>
+        </div>
+      </section>
 
-          <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {/* ───── Program — 12 Steg ───── */}
+      <section className="bg-off-white py-24 md:py-36">
+        <div className="mx-auto max-w-5xl px-6">
+          <h2 className="font-heading text-sm font-medium uppercase tracking-[0.3em] text-charcoal">
+            Programmet
+          </h2>
+
+          <div className="mt-12 space-y-0">
             {modules.map((mod) => (
               <div
                 key={mod.number}
-                className="group relative rounded-2xl bg-white p-6 transition-all hover:shadow-lg hover:shadow-navy/5"
+                className="grid grid-cols-[3.5rem_1fr] items-baseline gap-x-4 border-b border-light-gray/30 py-5 md:grid-cols-[4rem_12rem_1fr] md:gap-x-8"
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 font-heading text-sm font-bold text-primary">
-                  {mod.number}
+                <span className="font-heading text-3xl font-bold leading-none text-light-gray md:text-4xl">
+                  {String(mod.number).padStart(2, "0")}
                 </span>
-                <h3 className="mt-4 font-heading text-lg font-semibold text-navy">
+                <p className="font-heading text-lg font-semibold text-navy md:text-xl">
                   {mod.name}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-charcoal">
+                </p>
+                <p className="col-start-2 mt-1 text-sm leading-relaxed text-charcoal md:col-start-3 md:mt-0">
                   {mod.description}
                 </p>
               </div>
@@ -245,35 +215,28 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ───── How It Works ───── */}
-      <section className="bg-white py-24 md:py-32">
+      {/* ───── Så fungerar det ───── */}
+      <section className="bg-white py-24 md:py-36">
         <div className="mx-auto max-w-5xl px-6">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="font-heading text-3xl font-bold tracking-tight text-navy md:text-4xl">
-              Så fungerar det
-            </h2>
-            <p className="mt-4 text-lg text-charcoal">
-              Tre enkla steg för att komma igång med din mentala träning.
-            </p>
-          </div>
+          <h2 className="font-heading text-sm font-medium uppercase tracking-[0.3em] text-charcoal">
+            Så fungerar det
+          </h2>
 
-          <div className="mt-16 grid gap-8 md:grid-cols-3">
+          <div className="mt-12">
             {steps.map((step, i) => (
-              <div key={step.number} className="relative text-center">
-                {/* Connector line (desktop only) */}
-                {i < steps.length - 1 && (
-                  <div
-                    className="absolute right-0 top-8 hidden h-px w-full translate-x-1/2 bg-light-gray md:block"
-                    aria-hidden="true"
-                  />
-                )}
-                <span className="relative z-10 mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-off-white font-heading text-2xl font-bold text-primary">
+              <div
+                key={step.number}
+                className={`grid grid-cols-1 gap-4 py-8 md:grid-cols-[4rem_12rem_1fr] md:items-baseline md:gap-x-8${
+                  i < steps.length - 1 ? " border-b border-light-gray/30" : ""
+                }`}
+              >
+                <span className="font-heading text-3xl font-bold leading-none text-primary md:text-4xl">
                   {step.number}
                 </span>
-                <h3 className="mt-6 font-heading text-xl font-semibold text-navy">
+                <h3 className="font-heading text-xl font-semibold text-navy">
                   {step.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-charcoal">
+                <p className="text-base leading-relaxed text-charcoal">
                   {step.description}
                 </p>
               </div>
@@ -283,33 +246,31 @@ export default function HomePage() {
       </section>
 
       {/* ───── Testimonials ───── */}
-      <section className="bg-off-white py-24 md:py-32">
-        <div className="mx-auto max-w-6xl px-6">
-          <h2 className="text-center font-heading text-3xl font-bold tracking-tight text-navy md:text-4xl">
-            Vad idrottare säger
-          </h2>
+      <section className="bg-navy py-24 md:py-36">
+        <div className="mx-auto max-w-5xl px-6">
+          {/* Lead quote — large editorial scale */}
+          <blockquote>
+            <p className="max-w-3xl font-heading text-2xl font-light italic leading-snug text-white sm:text-3xl md:text-4xl">
+              &ldquo;{testimonials[0].quote}&rdquo;
+            </p>
+            <footer className="mt-6">
+              <span className="text-sm font-medium text-light-gray">
+                {testimonials[0].name}, {testimonials[0].sport}
+              </span>
+            </footer>
+          </blockquote>
 
-          <div className="mt-16 grid gap-6 md:grid-cols-3">
-            {testimonials.map((t) => (
-              <blockquote
-                key={t.name}
-                className="flex flex-col rounded-2xl bg-white p-8"
-              >
-                {/* Decorative quote mark */}
-                <span
-                  className="font-heading text-4xl leading-none text-primary/20"
-                  aria-hidden="true"
-                >
-                  &ldquo;
-                </span>
-                <p className="mt-2 flex-1 text-base leading-relaxed text-navy">
-                  {t.quote}
+          {/* Secondary quotes — smaller, stacked */}
+          <div className="mt-16 grid grid-cols-1 gap-10 border-t border-white/10 pt-12 sm:grid-cols-2 sm:gap-16">
+            {testimonials.slice(1).map((t) => (
+              <blockquote key={t.name}>
+                <p className="text-lg font-light italic leading-relaxed text-white/80">
+                  &ldquo;{t.quote}&rdquo;
                 </p>
-                <footer className="mt-6 border-t border-off-white-alt pt-4">
-                  <p className="font-heading text-sm font-semibold text-navy">
-                    {t.name}
-                  </p>
-                  <p className="text-xs text-charcoal">{t.sport}</p>
+                <footer className="mt-4">
+                  <span className="text-xs font-medium uppercase tracking-widest text-light-gray">
+                    {t.name}, {t.sport}
+                  </span>
                 </footer>
               </blockquote>
             ))}
@@ -318,25 +279,26 @@ export default function HomePage() {
       </section>
 
       {/* ───── Final CTA ───── */}
-      <section className="relative overflow-hidden bg-navy py-24 md:py-32">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute left-1/2 top-0 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/8 blur-3xl" />
-        </div>
-
-        <div className="relative mx-auto max-w-2xl px-6 text-center">
-          <h2 className="font-heading text-3xl font-bold tracking-tight text-white md:text-5xl">
-            Redo att ta nästa steg?
-          </h2>
-          <p className="mt-4 text-lg text-white/60">
-            Börja din mentala träning idag — helt gratis.
-          </p>
-          <Link
-            href="/registrera"
-            className="mt-8 inline-flex items-center rounded-[3rem] bg-primary px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:bg-primary-hover hover:shadow-xl hover:shadow-primary/30 font-heading"
-          >
-            Kom igång gratis
-          </Link>
-          <p className="mt-4 text-sm text-white/40">Från 799 SEK/år</p>
+      <section className="bg-white py-32 md:py-44">
+        <div className="mx-auto max-w-5xl px-6">
+          <div className="flex flex-col gap-6 md:flex-row md:items-baseline md:justify-between">
+            <div>
+              <h2 className="font-heading text-6xl font-bold tracking-tight text-navy sm:text-7xl md:text-8xl">
+                Redo?
+              </h2>
+              <p className="mt-4 text-lg text-charcoal">
+                Börja din mentala träning idag.
+              </p>
+            </div>
+            <div className="shrink-0">
+              <Link
+                href="/registrera"
+                className="inline-flex items-center rounded-none bg-navy px-8 py-4 font-heading text-base font-semibold tracking-wide text-white transition-colors hover:bg-charcoal"
+              >
+                Kom igång
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </>

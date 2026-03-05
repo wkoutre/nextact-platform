@@ -1,133 +1,93 @@
 import Link from "next/link";
 
-const productLinks = [
-  { href: "/om-programmet", label: "Om Programmet" },
+const produktLinks = [
+  { href: "/om-programmet", label: "Programmet" },
   { href: "/priser", label: "Priser" },
-  { href: "/blogg", label: "Blogg" },
-  { href: "/kontakt", label: "Kontakt" },
+  { href: "/#ai-coachen", label: "AI-coachen" },
 ];
 
-const legalLinks = [
-  { href: "/integritetspolicy", label: "Integritetspolicy" },
+const infoLinks = [
+  { href: "/om-oss", label: "Om oss" },
+  { href: "/blogg", label: "Blogg" },
+  { href: "/integritetspolicy", label: "Integritet" },
   { href: "/villkor", label: "Villkor" },
 ];
 
-function InstagramIcon() {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <rect x="2" y="2" width="20" height="20" rx="5" />
-      <circle cx="12" cy="12" r="5" />
-      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
-
-function FacebookIcon() {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-    </svg>
-  );
-}
-
 export function MarketingFooter() {
   return (
-    <footer className="bg-navy text-white/80">
-      <div className="mx-auto max-w-6xl px-6 py-16">
-        <div className="grid gap-12 md:grid-cols-3">
-          {/* Brand */}
-          <div>
-            <p className="font-heading text-lg font-bold text-white">
+    <footer className="bg-off-white text-navy">
+      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
+        {/* Main content — two columns */}
+        <div className="flex flex-col gap-16 lg:flex-row lg:items-start lg:justify-between">
+          {/* Left — Brand */}
+          <div className="max-w-sm">
+            <p className="font-heading text-4xl font-bold tracking-tight lg:text-5xl">
               Next Act
             </p>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/60">
-              Evidensbaserad mental träning för idrottare. Byggt på ACT för att
-              hjälpa dig prestera när det gäller.
+            <p className="mt-4 text-base leading-relaxed text-charcoal">
+              Evidensbaserad mental tr&auml;ning f&ouml;r idrottare som vill
+              prestera n&auml;r det g&auml;ller.
             </p>
           </div>
 
-          {/* Product links */}
-          <div>
-            <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-white/40">
-              Utforska
-            </p>
-            <ul className="flex flex-col gap-3">
-              {productLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-white/60 transition-colors hover:text-white"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Legal links */}
-          <div>
-            <p className="mb-4 text-xs font-semibold uppercase tracking-wider text-white/40">
-              Juridiskt
-            </p>
-            <ul className="flex flex-col gap-3">
-              {legalLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-white/60 transition-colors hover:text-white"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          {/* Right — Link grid */}
+          <div className="grid grid-cols-2 gap-x-16 gap-y-10">
+            <div>
+              <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-light-gray">
+                Produkt
+              </p>
+              <ul className="flex flex-col gap-3">
+                {produktLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-charcoal transition-colors duration-200 hover:text-navy"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-light-gray">
+                Information
+              </p>
+              <ul className="flex flex-col gap-3">
+                {infoLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-charcoal transition-colors duration-200 hover:text-navy"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 md:flex-row">
-          <p className="text-xs text-white/40">
-            &copy; 2026 Next Act. Alla rättigheter förbehållna.
+        <div className="mt-20 flex flex-col items-start justify-between gap-4 border-t border-navy/10 pt-8 md:flex-row md:items-center">
+          <p className="text-xs text-light-gray">
+            &copy; 2026 Next Act. Alla r&auml;ttigheter f&ouml;rbeh&aring;llna.
           </p>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             <a
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white/40 transition-colors hover:text-white"
-              aria-label="Instagram"
+              className="text-xs text-light-gray transition-colors duration-200 hover:text-navy"
             >
-              <InstagramIcon />
+              Instagram
             </a>
             <a
-              href="https://facebook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-white/40 transition-colors hover:text-white"
-              aria-label="Facebook"
+              href="mailto:hej@nextact.se"
+              className="text-xs text-light-gray transition-colors duration-200 hover:text-navy"
             >
-              <FacebookIcon />
+              Kontakt
             </a>
           </div>
         </div>
