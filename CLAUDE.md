@@ -3,6 +3,17 @@
 ## Overview
 Mental training platform for Swedish athletes, built on ACT (Acceptance and Commitment Therapy) / MAC framework.
 
+**Status (March 2026):** Phase 1 (Foundation) complete. Platform scaffolded with 121 source files. See `.claude/CLAUDE.md` for comprehensive project context, implementation status, and what to work on next.
+
+## Getting Started
+
+New to this project? See:
+- **`.claude/CLAUDE.md`** — Full project context for Claude Code (tech stack, conventions, architecture, status)
+- **`docs/SETUP-GUIDE.md`** — Step-by-step setup instructions
+- **`docs/HANDOFF-NOTES.md`** — Decisions, known issues, and context from the initial build
+- **`docs/plans/2026-03-05-nextact-final-design.md`** — Complete system design specification
+- **`docs/plans/2026-03-05-implementation-plan.md`** — 32-task phased implementation plan
+
 ## Tech Stack
 - Next.js 15 (App Router) + React 19 + TypeScript (strict)
 - Supabase (auth, PostgreSQL, storage, realtime)
