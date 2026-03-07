@@ -133,6 +133,30 @@ function parseContentBlocks(
           lessonId,
         });
         break;
+      case "story":
+        blocks.push({
+          type: "story",
+          content: String(b.content ?? ""),
+        });
+        break;
+      case "weekly_task":
+        blocks.push({
+          type: "weekly_task",
+          tasks: Array.isArray(b.tasks)
+            ? b.tasks.map((t: unknown) => String(t))
+            : [],
+          moduleTitle: b.moduleTitle ? String(b.moduleTitle) : undefined,
+        });
+        break;
+      case "bollplank_prompt":
+        blocks.push({
+          type: "bollplank_prompt",
+          prompt: String(b.prompt ?? ""),
+        });
+        break;
+      case "completion":
+        // Skipped — we append our own completion card below
+        break;
     }
   }
 

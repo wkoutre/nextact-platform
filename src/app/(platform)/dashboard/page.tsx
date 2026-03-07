@@ -75,7 +75,7 @@ export default async function DashboardPage() {
         <Card shadow>
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-success/15 text-2xl">
-              \ud83d\udd25
+              {"🔥"}
             </div>
             <div>
               <p className="text-sm text-charcoal">Dagar i rad</p>
@@ -102,7 +102,7 @@ export default async function DashboardPage() {
         <Card shadow>
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-2xl">
-              \ud83d\udcda
+              {"📚"}
             </div>
             <div>
               <p className="text-sm text-charcoal">Modulframsteg</p>
@@ -135,12 +135,12 @@ export default async function DashboardPage() {
         <Card shadow className="sm:col-span-2 lg:col-span-1">
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan/15 text-2xl">
-              \ud83e\udde0
+              {"🧠"}
             </div>
             <div>
-              <p className="text-sm text-charcoal">AI-coach</p>
+              <p className="text-sm text-charcoal">Bollplank</p>
               <p className="font-heading text-lg font-bold text-navy">
-                Prata med coachen
+                Ditt mentala bollplank
               </p>
             </div>
           </div>
@@ -148,7 +148,7 @@ export default async function DashboardPage() {
             href="/coach"
             className="mt-4 inline-flex w-full items-center justify-center rounded-xl bg-cyan px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-cyan/90"
           >
-            \u00d6ppna chatten
+            Öppna chatten
           </Link>
         </Card>
       </div>

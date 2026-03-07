@@ -160,7 +160,7 @@ export function LessonFeed({
           />
         );
       case "text":
-        return <TextCard title={block.title} content={block.content} />;
+        return <TextCard title={block.title} content={block.content} onContinue={() => scrollToCard(index + 1)} />;
       case "exercise_text":
         return (
           <ExerciseTextCard
@@ -213,11 +213,11 @@ export function LessonFeed({
           />
         );
       case "story":
-        return <StoryCard content={block.content} />;
+        return <StoryCard content={block.content} onContinue={() => scrollToCard(index + 1)} />;
       case "weekly_task":
         return <WeeklyTaskCard tasks={block.tasks} moduleTitle={block.moduleTitle} />;
       case "bollplank_prompt":
-        return <BollplankPromptCard prompt={block.prompt} />;
+        return <BollplankPromptCard prompt={block.prompt} onOpen={() => scrollToCard(index + 1)} />;
     }
   }
 
