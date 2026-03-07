@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { ModuleCard } from "@/components/features/lms/module-card";
+import { getModuleAccess } from "@/lib/services/lms/module-unlock";
 
 export const metadata: Metadata = {
   title: "Moduler — Next Act",
@@ -14,7 +15,7 @@ export default async function ModuleListPage() {
 
   const userId = user!.id;
 
-  // Fetch modules and progress in parallel
+  // Fetch modules, progress, and lesson counts in parallel
   const [modulesResult, progressResult, lessonCountsResult] = await Promise.all(
     [
       supabase
@@ -49,36 +50,22 @@ export default async function ModuleListPage() {
     }
   }
 
-  // Determine which modules are unlocked using linear progression:
-  // A module is unlocked if the previous module is completed, or it's the first module.
-  let nextUnlocked = true;
+  // Determine lock/active/completed status using the sequential unlock service
+  const moduleAccess = await getModuleAccess(supabase, userId);
 
-  const moduleCards = modules.map((mod, index) => {
+  const moduleCards = modules.map((mod) => {
     const mp = progressMap.get(mod.id);
     const totalLessons = lessonCountMap.get(mod.id) ?? mp?.lessons_total ?? 0;
     const completedLessons = mp?.lessons_completed ?? 0;
-    const isCompleted =
-      mp?.completed_at !== null && mp?.completed_at !== undefined;
 
-    let status: "completed" | "in_progress" | "locked";
-    if (isCompleted) {
-      status = "completed";
-    } else if (nextUnlocked) {
-      status =
-        completedLessons > 0
+    const access = moduleAccess.get(mod.id) ?? "locked";
+    // ModuleCard uses "in_progress" where our service uses "active"
+    const status: "completed" | "in_progress" | "locked" =
+      access === "completed"
+        ? "completed"
+        : access === "active"
           ? "in_progress"
-          : index === 0
-            ? "in_progress"
-            : "in_progress";
-      nextUnlocked = false;
-    } else {
-      status = "locked";
-    }
-
-    // If this module is completed, the next one can still be unlocked
-    if (isCompleted) {
-      nextUnlocked = true;
-    }
+          : "locked";
 
     return (
       <ModuleCard

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { ActProcess, ProgressStatus } from "@/lib/supabase/types";
+import { getModuleAccess } from "@/lib/services/lms/module-unlock";
 
 const actProcessLabels: Record<ActProcess, string> = {
   values: "Värderingar",
@@ -48,6 +49,13 @@ export default async function ModuleDetailPage({ params }: Props) {
   } = await supabase.auth.getUser();
 
   const userId = user!.id;
+
+  // Guard: redirect to /learn if this module is locked
+  const moduleAccess = await getModuleAccess(supabase, userId);
+  const access = moduleAccess.get(moduleId);
+  if (access === "locked") {
+    redirect("/learn");
+  }
 
   // Fetch module, lessons, and progress in parallel
   const [moduleResult, lessonsResult, progressResult] = await Promise.all([
