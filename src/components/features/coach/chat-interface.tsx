@@ -90,7 +90,7 @@ export function ChatInterface({
           <div className="flex h-full items-center justify-center">
             <div className="text-center">
               <p className="text-lg font-heading font-semibold text-charcoal">
-                Hej! Jag {"ä"}r din AI-coach.
+                Hej! Jag {"ä"}r ditt mentala bollplank.
               </p>
               <p className="mt-2 text-sm text-charcoal/60">
                 St{"ä"}ll en fr{"å"}ga om mental tr{"ä"}ning,
@@ -160,7 +160,7 @@ export function ChatInterface({
             placeholder={
               limitReached
                 ? "Meddelandegränsen nådd..."
-                : "Skriv ett meddelande..."
+                : "Skriv till ditt bollplank..."
             }
             className="flex-1 rounded-full border border-navy/15 bg-off-white px-4 py-2.5 text-sm text-charcoal placeholder:text-charcoal/40 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50"
             disabled={isStreaming || limitReached}

@@ -1,6 +1,36 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/types";
 
+function formatToughnessData(data: Record<string, unknown> | null): string {
+  if (!data) return "Inte påbörjad ännu.";
+
+  const sectionLabels: Record<string, string> = {
+    kartlaggning: "Kartläggning",
+    varderad_riktning: "Värderad riktning",
+    hinder: "Hinder (Apan & kletiga tankar)",
+    beteenden: "Beteenden",
+    vaga_lista: "Våga-lista",
+    fokusrutiner: "Fokusrutiner",
+    gameplan: "Gameplan",
+  };
+
+  const parts: string[] = [];
+  for (const [key, label] of Object.entries(sectionLabels)) {
+    const val = data[key];
+    if (!val) continue;
+    if (Array.isArray(val) && val.length === 0) continue;
+    if (
+      typeof val === "object" &&
+      !Array.isArray(val) &&
+      Object.keys(val as object).length === 0
+    )
+      continue;
+    parts.push(`**${label}:** ${JSON.stringify(val)}`);
+  }
+
+  return parts.length > 0 ? parts.join("\n") : "Inte påbörjad ännu.";
+}
+
 export async function buildUserContext(
   supabase: SupabaseClient<Database>,
   userId: string,
@@ -12,6 +42,7 @@ export async function buildUserContext(
     toughnessResult,
     conversationsResult,
     lessonResult,
+    toughnessModelDataResult,
   ] = await Promise.all([
     supabase
       .from("profiles")
@@ -56,6 +87,13 @@ export async function buildUserContext(
           .eq("id", lessonId)
           .single()
       : Promise.resolve(null),
+
+    // TODO: regenerate types after migration
+    (supabase as any) // eslint-disable-line @typescript-eslint/no-explicit-any
+      .from("toughness_model_data")
+      .select("sections")
+      .eq("user_id", userId)
+      .maybeSingle(),
   ]);
 
   const sections: string[] = [];
@@ -101,6 +139,15 @@ export async function buildUserContext(
 - Engagerat handlande: ${toughness.committed_action_score}`
     );
   }
+
+  // Toughness model data (JSONB sections)
+  const toughnessModelData = toughnessModelDataResult?.data as
+    | { sections: Record<string, unknown> | null }
+    | null
+    | undefined;
+  sections.push(
+    `## Atletens tuffhetsmodell\n${formatToughnessData(toughnessModelData?.sections ?? null)}`
+  );
 
   // Recent conversation summaries
   const conversations = conversationsResult.data;
