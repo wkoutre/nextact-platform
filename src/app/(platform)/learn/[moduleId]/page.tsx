@@ -53,7 +53,7 @@ export default async function ModuleDetailPage({ params }: Props) {
   // Guard: redirect to /learn if this module is locked
   const moduleAccess = await getModuleAccess(supabase, userId);
   const access = moduleAccess.get(moduleId);
-  if (access === "locked") {
+  if (!access || access === "locked") {
     redirect("/learn");
   }
 
