@@ -11,9 +11,7 @@ export async function GET(request: Request) {
   const supabase = createAdminClient();
   const now = new Date().toISOString();
 
-  // TODO: sms_queue not yet in generated types — regenerate after migration
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: pending, error } = await (supabase as any)
+  const { data: pending, error } = await supabase
     .from("sms_queue")
     .select("*")
     .eq("status", "pending")
@@ -27,22 +25,16 @@ export async function GET(request: Request) {
   let sent = 0;
   let failed = 0;
 
-  for (const sms of (pending as {
-    id: string;
-    phone_number: string;
-    message: string;
-  }[]) ?? []) {
+  for (const sms of pending ?? []) {
     try {
       await sendCriticalSMS({ to: sms.phone_number, message: sms.message });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabase as any)
+      await supabase
         .from("sms_queue")
         .update({ status: "sent", sent_at: new Date().toISOString() })
         .eq("id", sms.id);
       sent++;
     } catch {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (supabase as any)
+      await supabase
         .from("sms_queue")
         .update({ status: "failed", error_message: "Send failed" })
         .eq("id", sms.id);

@@ -48,9 +48,12 @@ export default async function DashboardPage() {
   const recentLessons = recentResult.data ?? [];
 
   const modulePercent =
-    currentModule && currentModule.lessons_total > 0
+    currentModule &&
+    (currentModule.lessons_total ?? 0) > 0
       ? Math.round(
-          (currentModule.lessons_completed / currentModule.lessons_total) * 100
+          ((currentModule.lessons_completed ?? 0) /
+            (currentModule.lessons_total ?? 1)) *
+            100
         )
       : 0;
 
@@ -81,14 +84,14 @@ export default async function DashboardPage() {
               </p>
             </div>
           </div>
-          {streak && streak.current_streak > 0 && (
+          {streak && (streak.current_streak ?? 0) > 0 && (
             <p className="mt-3 text-sm text-success">
-              {streak.current_streak >= 7
+              {(streak.current_streak ?? 0) >= 7
                 ? "Fantastiskt! Du \u00e4r p\u00e5 g\u00e5ng!"
                 : "Bra jobbat! Forts\u00e4tt s\u00e5!"}
             </p>
           )}
-          {(!streak || streak.current_streak === 0) && (
+          {(!streak || (streak.current_streak ?? 0) === 0) && (
             <p className="mt-3 text-sm text-charcoal">
               B\u00f6rja en ny streak idag!
             </p>
@@ -163,7 +166,7 @@ export default async function DashboardPage() {
               </p>
               <p className="mt-1 text-sm text-charcoal">
                 {currentModule
-                  ? `Du har ${currentModule.lessons_total - currentModule.lessons_completed} lektioner kvar i din nuvarande modul.`
+                  ? `Du har ${(currentModule.lessons_total ?? 0) - (currentModule.lessons_completed ?? 0)} lektioner kvar i din nuvarande modul.`
                   : "Starta din f\u00f6rsta lektion f\u00f6r att komma ig\u00e5ng!"}
               </p>
             </div>

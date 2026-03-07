@@ -15,9 +15,7 @@ export async function scheduleModuleSms({
 }) {
   const supabase = createAdminClient();
 
-  // TODO: phone_number and training_schedule not yet in generated types — regenerate after migration
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: profile } = await (supabase as any)
+  const { data: profile } = await supabase
     .from("profiles")
     .select("phone_number, training_schedule")
     .eq("id", userId)
@@ -25,11 +23,10 @@ export async function scheduleModuleSms({
 
   if (!profile?.phone_number) return;
 
-  const phoneNumber = profile.phone_number as string;
-  const schedule = (profile.training_schedule ?? []) as {
-    day: string;
-    time: string;
-  }[];
+  const phoneNumber = profile.phone_number;
+  const schedule = (Array.isArray(profile.training_schedule)
+    ? profile.training_schedule
+    : []) as { day: string; time: string }[];
 
   let scheduledFor: Date;
 
@@ -39,9 +36,7 @@ export async function scheduleModuleSms({
     scheduledFor = getNextTrainingMinus1Hour(schedule);
   }
 
-  // TODO: sms_queue not yet in generated types — regenerate after migration
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  await (supabase as any).from("sms_queue").insert({
+  await supabase.from("sms_queue").insert({
     user_id: userId,
     phone_number: phoneNumber,
     message,

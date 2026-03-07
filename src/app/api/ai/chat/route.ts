@@ -46,7 +46,7 @@ export async function POST(request: Request) {
     .eq("id", user.id)
     .single();
 
-  const tier: SubscriptionTier = profile?.subscription_tier ?? "free";
+  const tier = (profile?.subscription_tier ?? "free") as SubscriptionTier;
 
   // Check rate limits
   const rateLimit = await checkRateLimit(admin, user.id, tier);
@@ -164,9 +164,9 @@ export async function POST(request: Request) {
         await admin
           .from("ai_usage")
           .update({
-            messages_count: existing.messages_count + 1,
-            input_tokens: existing.input_tokens + (usage.inputTokens ?? 0),
-            output_tokens: existing.output_tokens + (usage.outputTokens ?? 0),
+            messages_count: (existing.messages_count ?? 0) + 1,
+            input_tokens: (existing.input_tokens ?? 0) + (usage.inputTokens ?? 0),
+            output_tokens: (existing.output_tokens ?? 0) + (usage.outputTokens ?? 0),
           })
           .eq("id", existing.id);
       } else {

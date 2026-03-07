@@ -121,7 +121,7 @@ export async function getDailyExercise() {
 
   // Find the first module that isn't fully completed
   const activeModule = (moduleProgress ?? []).find(
-    (mp) => mp.lessons_completed < mp.lessons_total
+    (mp) => (mp.lessons_completed ?? 0) < (mp.lessons_total ?? 0)
   );
 
   if (!activeModule?.module_id) {

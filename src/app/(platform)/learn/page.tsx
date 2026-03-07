@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { ModuleCard } from "@/components/features/lms/module-card";
 import { getModuleAccess } from "@/lib/services/lms/module-unlock";
+import type { ActProcess } from "@/lib/supabase/types";
 
 export const metadata: Metadata = {
   title: "Moduler — Next Act",
@@ -73,7 +74,7 @@ export default async function ModuleListPage() {
         id={mod.id}
         number={mod.order}
         title={mod.title}
-        actProcess={mod.act_process}
+        actProcess={(mod.act_process as ActProcess) ?? null}
         estimatedMinutes={mod.estimated_duration_minutes}
         lessonsCompleted={completedLessons}
         lessonsTotal={totalLessons}

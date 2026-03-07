@@ -27,7 +27,7 @@ export default async function CoachPage() {
     .eq("id", user.id)
     .single();
 
-  const tier: SubscriptionTier = profile?.subscription_tier ?? "free";
+  const tier = (profile?.subscription_tier ?? "free") as SubscriptionTier;
 
   let remainingMessages: number | undefined;
   let rateLimitReached = false;

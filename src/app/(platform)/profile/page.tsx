@@ -40,13 +40,10 @@ export default async function ProfilePage() {
   const ageBracket = profile?.age_bracket ?? "";
   const tier = profile?.subscription_tier ?? "free";
   const preferredLanguage = profile?.preferred_language ?? "sv";
-  // TODO: training_schedule and phone_number not yet in generated types — regenerate after migration
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const profileAny = profile as any;
-  const trainingSchedule = Array.isArray(profileAny?.training_schedule)
-    ? (profileAny.training_schedule as { day: string; time: string }[])
+  const trainingSchedule = Array.isArray(profile?.training_schedule)
+    ? (profile.training_schedule as { day: string; time: string }[])
     : [];
-  const phoneNumber = (profileAny?.phone_number as string | null) ?? "";
+  const phoneNumber = profile?.phone_number ?? "";
 
   const channels = Array.isArray(notificationPrefs?.preferred_channels)
     ? (notificationPrefs.preferred_channels as string[])

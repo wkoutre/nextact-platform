@@ -68,11 +68,11 @@ export default async function ContentPage() {
                     </span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Badge variant={STATUS_VARIANT[lesson.status] ?? "default"}>
-                      {STATUS_LABELS[lesson.status] ?? lesson.status}
+                    <Badge variant={STATUS_VARIANT[lesson.status ?? ""] ?? "default"}>
+                      {STATUS_LABELS[lesson.status ?? ""] ?? lesson.status}
                     </Badge>
                     <span className="text-xs text-charcoal/30">
-                      {new Date(lesson.created_at).toLocaleDateString("sv-SE")}
+                      {lesson.created_at ? new Date(lesson.created_at).toLocaleDateString("sv-SE") : "—"}
                     </span>
                     <Link
                       href={`/admin/content/${lesson.id}`}

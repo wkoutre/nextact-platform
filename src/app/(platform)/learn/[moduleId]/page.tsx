@@ -132,7 +132,7 @@ export default async function ModuleDetailPage({ params }: Props) {
             </h1>
             {mod.act_process && (
               <p className="text-sm text-charcoal">
-                {actProcessLabels[mod.act_process]}
+                {actProcessLabels[mod.act_process as ActProcess] ?? mod.act_process}
               </p>
             )}
           </div>

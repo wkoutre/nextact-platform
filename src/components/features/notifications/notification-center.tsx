@@ -18,9 +18,9 @@ interface Notification {
   id: string;
   type: string;
   channel: string;
-  status: string;
+  status: string | null;
   content: Json;
-  created_at: string;
+  created_at: string | null;
 }
 
 const NOTIFICATION_ICONS: Record<NotificationType, string> = {
@@ -196,7 +196,7 @@ export function NotificationCenter() {
                       </p>
                     )}
                     <p className="mt-1 text-[10px] text-light-gray">
-                      {formatRelativeTime(notification.created_at)}
+                      {notification.created_at ? formatRelativeTime(notification.created_at) : ""}
                     </p>
                   </div>
                   {isUnread && (

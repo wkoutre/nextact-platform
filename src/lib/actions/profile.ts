@@ -59,9 +59,7 @@ export async function saveTrainingSchedule(
   } = await supabase.auth.getUser();
   if (!user) throw new Error("Not authenticated");
 
-  // TODO: training_schedule not yet in generated types — regenerate after migration
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase as any)
+  const { error } = await supabase
     .from("profiles")
     .update({ training_schedule: schedule })
     .eq("id", user.id);
@@ -76,9 +74,7 @@ export async function savePhoneNumber(phoneNumber: string) {
   } = await supabase.auth.getUser();
   if (!user) throw new Error("Not authenticated");
 
-  // TODO: phone_number not yet in generated types — regenerate after migration
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { error } = await (supabase as any)
+  const { error } = await supabase
     .from("profiles")
     .update({ phone_number: phoneNumber })
     .eq("id", user.id);

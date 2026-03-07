@@ -60,15 +60,15 @@ export default async function UsersPage({ searchParams }: Props) {
                 </td>
                 <td className="px-3 py-2.5">
                   <Badge>
-                    {TIER_LABELS[u.subscription_tier] ?? u.subscription_tier}
+                    {TIER_LABELS[u.subscription_tier ?? ""] ?? u.subscription_tier}
                   </Badge>
                 </td>
                 <td className="px-3 py-2.5 text-charcoal/60">
-                  {STATUS_LABELS[u.subscription_status] ??
+                  {STATUS_LABELS[u.subscription_status ?? ""] ??
                     u.subscription_status}
                 </td>
                 <td className="px-3 py-2.5 text-charcoal/40">
-                  {new Date(u.created_at).toLocaleDateString("sv-SE")}
+                  {u.created_at ? new Date(u.created_at).toLocaleDateString("sv-SE") : "—"}
                 </td>
                 <td className="px-3 py-2.5">
                   <Link

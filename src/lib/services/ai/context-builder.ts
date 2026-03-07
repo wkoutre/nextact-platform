@@ -88,10 +88,11 @@ export async function buildUserContext(
           .single()
       : Promise.resolve(null),
 
-    // TODO: regenerate types after migration
-    (supabase as any) // eslint-disable-line @typescript-eslint/no-explicit-any
+    supabase
       .from("toughness_model_data")
-      .select("sections")
+      .select(
+        "kartlaggning, varderad_riktning, hinder, beteenden, vaga_lista, fokusrutiner, gameplan"
+      )
       .eq("user_id", userId)
       .maybeSingle(),
   ]);
@@ -117,8 +118,10 @@ export async function buildUserContext(
     const lines = progress.map((p) => {
       const mod = p.modules as { title: string; act_process: string } | null;
       const pct =
-        p.lessons_total > 0
-          ? Math.round((p.lessons_completed / p.lessons_total) * 100)
+        (p.lessons_total ?? 0) > 0
+          ? Math.round(
+              ((p.lessons_completed ?? 0) / (p.lessons_total ?? 1)) * 100
+            )
           : 0;
       const status = p.completed_at ? "Klar" : `${pct}%`;
       return `- ${mod?.title ?? "Okand modul"} (${mod?.act_process ?? ""}): ${status}`;
@@ -140,13 +143,13 @@ export async function buildUserContext(
     );
   }
 
-  // Toughness model data (JSONB sections)
-  const toughnessModelData = toughnessModelDataResult?.data as
-    | { sections: Record<string, unknown> | null }
-    | null
-    | undefined;
+  // Toughness model data (JSONB columns)
+  const toughnessModelData = toughnessModelDataResult?.data as Record<
+    string,
+    unknown
+  > | null;
   sections.push(
-    `## Atletens tuffhetsmodell\n${formatToughnessData(toughnessModelData?.sections ?? null)}`
+    `## Atletens tuffhetsmodell\n${formatToughnessData(toughnessModelData ?? null)}`
   );
 
   // Recent conversation summaries

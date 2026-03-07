@@ -10,8 +10,7 @@ export default async function TuffhetsmodellenPage() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/logga-in");
 
-  // TODO: regenerate types after migration
-  const { data } = await (supabase as any)
+  const { data } = await supabase
     .from("toughness_model_data")
     .select("*")
     .eq("user_id", user.id)

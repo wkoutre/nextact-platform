@@ -4,9 +4,760 @@ export type Json =
   | boolean
   | null
   | { [key: string]: Json | undefined }
-  | Json[];
+  | Json[]
 
-export type UserRole = "athlete" | "coach" | "admin";
+export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "14.1"
+  }
+  public: {
+    Tables: {
+      ai_conversations: {
+        Row: {
+          context_id: string | null
+          context_type: string | null
+          created_at: string | null
+          id: string
+          summary: string | null
+          user_id: string | null
+        }
+        Insert: {
+          context_id?: string | null
+          context_type?: string | null
+          created_at?: string | null
+          id?: string
+          summary?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          context_id?: string | null
+          context_type?: string | null
+          created_at?: string | null
+          id?: string
+          summary?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      ai_messages: {
+        Row: {
+          content: string
+          conversation_id: string | null
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          role: string
+        }
+        Insert: {
+          content: string
+          conversation_id?: string | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          role: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "ai_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_usage: {
+        Row: {
+          date: string | null
+          id: string
+          input_tokens: number | null
+          messages_count: number | null
+          output_tokens: number | null
+          user_id: string | null
+        }
+        Insert: {
+          date?: string | null
+          id?: string
+          input_tokens?: number | null
+          messages_count?: number | null
+          output_tokens?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          date?: string | null
+          id?: string
+          input_tokens?: number | null
+          messages_count?: number | null
+          output_tokens?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      blog_posts: {
+        Row: {
+          author_id: string | null
+          content: string
+          created_at: string | null
+          excerpt: string | null
+          id: string
+          published_at: string | null
+          slug: string
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          author_id?: string | null
+          content: string
+          created_at?: string | null
+          excerpt?: string | null
+          id?: string
+          published_at?: string | null
+          slug: string
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          author_id?: string | null
+          content?: string
+          created_at?: string | null
+          excerpt?: string | null
+          id?: string
+          published_at?: string | null
+          slug?: string
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      lesson_progress: {
+        Row: {
+          ai_feedback: Json | null
+          completed_at: string | null
+          created_at: string | null
+          id: string
+          lesson_id: string | null
+          responses: Json | null
+          started_at: string | null
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          ai_feedback?: Json | null
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          lesson_id?: string | null
+          responses?: Json | null
+          started_at?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          ai_feedback?: Json | null
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          lesson_id?: string | null
+          responses?: Json | null
+          started_at?: string | null
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_progress_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lessons: {
+        Row: {
+          content: Json | null
+          created_at: string | null
+          duration_seconds: number | null
+          id: string
+          lesson_type: string | null
+          metadata: Json | null
+          module_id: string | null
+          order: number
+          status: string | null
+          title: string
+          vimeo_video_id: string | null
+        }
+        Insert: {
+          content?: Json | null
+          created_at?: string | null
+          duration_seconds?: number | null
+          id?: string
+          lesson_type?: string | null
+          metadata?: Json | null
+          module_id?: string | null
+          order?: number
+          status?: string | null
+          title: string
+          vimeo_video_id?: string | null
+        }
+        Update: {
+          content?: Json | null
+          created_at?: string | null
+          duration_seconds?: number | null
+          id?: string
+          lesson_type?: string | null
+          metadata?: Json | null
+          module_id?: string | null
+          order?: number
+          status?: string | null
+          title?: string
+          vimeo_video_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lessons_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      module_progress: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          id: string
+          lessons_completed: number | null
+          lessons_total: number | null
+          module_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          lessons_completed?: number | null
+          lessons_total?: number | null
+          module_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          lessons_completed?: number | null
+          lessons_total?: number | null
+          module_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "module_progress_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      modules: {
+        Row: {
+          act_process: string | null
+          color_theme: string | null
+          created_at: string | null
+          description: string | null
+          estimated_duration_minutes: number | null
+          icon: string | null
+          id: string
+          order: number
+          program_id: string | null
+          title: string
+        }
+        Insert: {
+          act_process?: string | null
+          color_theme?: string | null
+          created_at?: string | null
+          description?: string | null
+          estimated_duration_minutes?: number | null
+          icon?: string | null
+          id?: string
+          order?: number
+          program_id?: string | null
+          title: string
+        }
+        Update: {
+          act_process?: string | null
+          color_theme?: string | null
+          created_at?: string | null
+          description?: string | null
+          estimated_duration_minutes?: number | null
+          icon?: string | null
+          id?: string
+          order?: number
+          program_id?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "modules_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_preferences: {
+        Row: {
+          created_at: string | null
+          id: string
+          per_type_settings: Json | null
+          preferred_channels: Json | null
+          quiet_hours_end: string | null
+          quiet_hours_start: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          per_type_settings?: Json | null
+          preferred_channels?: Json | null
+          quiet_hours_end?: string | null
+          quiet_hours_start?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          per_type_settings?: Json | null
+          preferred_channels?: Json | null
+          quiet_hours_end?: string | null
+          quiet_hours_start?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          channel: string
+          content: Json
+          created_at: string | null
+          id: string
+          scheduled_for: string | null
+          sent_at: string | null
+          status: string | null
+          type: string
+          user_id: string | null
+        }
+        Insert: {
+          channel: string
+          content: Json
+          created_at?: string | null
+          id?: string
+          scheduled_for?: string | null
+          sent_at?: string | null
+          status?: string | null
+          type: string
+          user_id?: string | null
+        }
+        Update: {
+          channel?: string
+          content?: Json
+          created_at?: string | null
+          id?: string
+          scheduled_for?: string | null
+          sent_at?: string | null
+          status?: string | null
+          type?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          age_bracket: string | null
+          created_at: string | null
+          display_name: string | null
+          id: string
+          notification_preferences: Json | null
+          onboarding_completed: boolean | null
+          phone_number: string | null
+          preferred_language: string | null
+          sport: string | null
+          subscription_status: string | null
+          subscription_tier: string | null
+          training_schedule: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          age_bracket?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          id: string
+          notification_preferences?: Json | null
+          onboarding_completed?: boolean | null
+          phone_number?: string | null
+          preferred_language?: string | null
+          sport?: string | null
+          subscription_status?: string | null
+          subscription_tier?: string | null
+          training_schedule?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          age_bracket?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          id?: string
+          notification_preferences?: Json | null
+          onboarding_completed?: boolean | null
+          phone_number?: string | null
+          preferred_language?: string | null
+          sport?: string | null
+          subscription_status?: string | null
+          subscription_tier?: string | null
+          training_schedule?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      programs: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          order: number
+          title: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          order?: number
+          title: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          order?: number
+          title?: string
+        }
+        Relationships: []
+      }
+      sms_queue: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          id: string
+          message: string
+          module_number: number | null
+          phone_number: string
+          scheduled_for: string | null
+          sent_at: string | null
+          status: string | null
+          trigger_type: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          message: string
+          module_number?: number | null
+          phone_number: string
+          scheduled_for?: string | null
+          sent_at?: string | null
+          status?: string | null
+          trigger_type: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          message?: string
+          module_number?: number | null
+          phone_number?: string
+          scheduled_for?: string | null
+          sent_at?: string | null
+          status?: string | null
+          trigger_type?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      toughness_model: {
+        Row: {
+          acceptance_score: number | null
+          committed_action_score: number | null
+          created_at: string | null
+          defusion_score: number | null
+          id: string
+          present_moment_score: number | null
+          self_as_context_score: number | null
+          snapshot_date: string | null
+          user_id: string | null
+          values_score: number | null
+        }
+        Insert: {
+          acceptance_score?: number | null
+          committed_action_score?: number | null
+          created_at?: string | null
+          defusion_score?: number | null
+          id?: string
+          present_moment_score?: number | null
+          self_as_context_score?: number | null
+          snapshot_date?: string | null
+          user_id?: string | null
+          values_score?: number | null
+        }
+        Update: {
+          acceptance_score?: number | null
+          committed_action_score?: number | null
+          created_at?: string | null
+          defusion_score?: number | null
+          id?: string
+          present_moment_score?: number | null
+          self_as_context_score?: number | null
+          snapshot_date?: string | null
+          user_id?: string | null
+          values_score?: number | null
+        }
+        Relationships: []
+      }
+      toughness_model_data: {
+        Row: {
+          beteenden: Json | null
+          created_at: string | null
+          fokusrutiner: Json | null
+          gameplan: Json | null
+          hinder: Json | null
+          id: string
+          kartlaggning: Json | null
+          updated_at: string | null
+          user_id: string | null
+          vaga_lista: Json | null
+          varderad_riktning: Json | null
+        }
+        Insert: {
+          beteenden?: Json | null
+          created_at?: string | null
+          fokusrutiner?: Json | null
+          gameplan?: Json | null
+          hinder?: Json | null
+          id?: string
+          kartlaggning?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
+          vaga_lista?: Json | null
+          varderad_riktning?: Json | null
+        }
+        Update: {
+          beteenden?: Json | null
+          created_at?: string | null
+          fokusrutiner?: Json | null
+          gameplan?: Json | null
+          hinder?: Json | null
+          id?: string
+          kartlaggning?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
+          vaga_lista?: Json | null
+          varderad_riktning?: Json | null
+        }
+        Relationships: []
+      }
+      user_streaks: {
+        Row: {
+          current_streak: number | null
+          id: string
+          last_activity_date: string | null
+          longest_streak: number | null
+          streak_freezes_available: number | null
+          streak_freezes_used: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          current_streak?: number | null
+          id?: string
+          last_activity_date?: string | null
+          longest_streak?: number | null
+          streak_freezes_available?: number | null
+          streak_freezes_used?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          current_streak?: number | null
+          id?: string
+          last_activity_date?: string | null
+          longest_streak?: number | null
+          streak_freezes_available?: number | null
+          streak_freezes_used?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      user_role: { Args: never; Returns: string }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+}
+
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
+    : never
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
+    : never
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
+    : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+export const Constants = {
+  public: {
+    Enums: {},
+  },
+} as const
+
+// ─── Domain type aliases ──────────────────────────────────────────────────────
+// These are not DB enums but are used throughout the codebase for type safety.
+
+export type UserRole = "admin" | "athlete";
 
 export type SubscriptionTier = "free" | "standard" | "premium";
 
@@ -15,9 +766,8 @@ export type SubscriptionStatus =
   | "trialing"
   | "past_due"
   | "canceled"
+  | "incomplete"
   | "expired";
-
-export type AgeBracket = "13-14" | "15-18" | "19-25" | "26+";
 
 export type ActProcess =
   | "values"
@@ -28,545 +778,10 @@ export type ActProcess =
   | "committed_action"
   | "integration";
 
-export type LessonType = "video" | "text" | "exercise" | "reflection" | "quiz";
-
-export type LessonStatus = "draft" | "review" | "published";
-
 export type ProgressStatus = "not_started" | "in_progress" | "completed";
 
-export type AiContextType = "general" | "lesson" | "exercise" | "check_in";
+export type LessonStatus = "draft" | "published" | "archived";
 
-export type AiMessageRole = "user" | "assistant";
+export type AiContextType = "general" | "lesson" | "module" | "progress";
 
-export type NotificationChannel = "email" | "sms" | "in_app";
-
-export type NotificationStatus = "pending" | "sent" | "failed" | "read";
-
-export type BlogPostStatus = "draft" | "published";
-
-export interface Database {
-  public: {
-    Tables: {
-      profiles: {
-        Row: {
-          id: string;
-          display_name: string | null;
-          sport: string;
-          age_bracket: AgeBracket | null;
-          subscription_tier: SubscriptionTier;
-          subscription_status: SubscriptionStatus;
-          preferred_language: string;
-          notification_preferences: Json;
-          onboarding_completed: boolean;
-          created_at: string;
-          updated_at: string;
-        };
-        Insert: {
-          id: string;
-          display_name?: string | null;
-          sport?: string;
-          age_bracket?: AgeBracket | null;
-          subscription_tier?: SubscriptionTier;
-          subscription_status?: SubscriptionStatus;
-          preferred_language?: string;
-          notification_preferences?: Json;
-          onboarding_completed?: boolean;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Update: {
-          id?: string;
-          display_name?: string | null;
-          sport?: string;
-          age_bracket?: AgeBracket | null;
-          subscription_tier?: SubscriptionTier;
-          subscription_status?: SubscriptionStatus;
-          preferred_language?: string;
-          notification_preferences?: Json;
-          onboarding_completed?: boolean;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Relationships: [];
-      };
-      programs: {
-        Row: {
-          id: string;
-          title: string;
-          description: string | null;
-          order: number;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          title: string;
-          description?: string | null;
-          order?: number;
-          created_at?: string;
-        };
-        Update: {
-          id?: string;
-          title?: string;
-          description?: string | null;
-          order?: number;
-          created_at?: string;
-        };
-        Relationships: [];
-      };
-      modules: {
-        Row: {
-          id: string;
-          program_id: string | null;
-          title: string;
-          description: string | null;
-          act_process: ActProcess | null;
-          icon: string | null;
-          color_theme: string | null;
-          order: number;
-          estimated_duration_minutes: number | null;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          program_id?: string | null;
-          title: string;
-          description?: string | null;
-          act_process?: ActProcess | null;
-          icon?: string | null;
-          color_theme?: string | null;
-          order?: number;
-          estimated_duration_minutes?: number | null;
-          created_at?: string;
-        };
-        Update: {
-          id?: string;
-          program_id?: string | null;
-          title?: string;
-          description?: string | null;
-          act_process?: ActProcess | null;
-          icon?: string | null;
-          color_theme?: string | null;
-          order?: number;
-          estimated_duration_minutes?: number | null;
-          created_at?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "modules_program_id_fkey";
-            columns: ["program_id"];
-            isOneToOne: false;
-            referencedRelation: "programs";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      lessons: {
-        Row: {
-          id: string;
-          module_id: string | null;
-          title: string;
-          order: number;
-          lesson_type: LessonType | null;
-          content: Json;
-          vimeo_video_id: string | null;
-          duration_seconds: number | null;
-          metadata: Json;
-          status: LessonStatus;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          module_id?: string | null;
-          title: string;
-          order?: number;
-          lesson_type?: LessonType | null;
-          content?: Json;
-          vimeo_video_id?: string | null;
-          duration_seconds?: number | null;
-          metadata?: Json;
-          status?: LessonStatus;
-          created_at?: string;
-        };
-        Update: {
-          id?: string;
-          module_id?: string | null;
-          title?: string;
-          order?: number;
-          lesson_type?: LessonType | null;
-          content?: Json;
-          vimeo_video_id?: string | null;
-          duration_seconds?: number | null;
-          metadata?: Json;
-          status?: LessonStatus;
-          created_at?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "lessons_module_id_fkey";
-            columns: ["module_id"];
-            isOneToOne: false;
-            referencedRelation: "modules";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      lesson_progress: {
-        Row: {
-          id: string;
-          user_id: string | null;
-          lesson_id: string | null;
-          status: ProgressStatus;
-          started_at: string | null;
-          completed_at: string | null;
-          responses: Json;
-          ai_feedback: Json;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          user_id?: string | null;
-          lesson_id?: string | null;
-          status?: ProgressStatus;
-          started_at?: string | null;
-          completed_at?: string | null;
-          responses?: Json;
-          ai_feedback?: Json;
-          created_at?: string;
-        };
-        Update: {
-          id?: string;
-          user_id?: string | null;
-          lesson_id?: string | null;
-          status?: ProgressStatus;
-          started_at?: string | null;
-          completed_at?: string | null;
-          responses?: Json;
-          ai_feedback?: Json;
-          created_at?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "lesson_progress_lesson_id_fkey";
-            columns: ["lesson_id"];
-            isOneToOne: false;
-            referencedRelation: "lessons";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      module_progress: {
-        Row: {
-          id: string;
-          user_id: string | null;
-          module_id: string | null;
-          lessons_completed: number;
-          lessons_total: number;
-          completed_at: string | null;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          user_id?: string | null;
-          module_id?: string | null;
-          lessons_completed?: number;
-          lessons_total?: number;
-          completed_at?: string | null;
-          created_at?: string;
-        };
-        Update: {
-          id?: string;
-          user_id?: string | null;
-          module_id?: string | null;
-          lessons_completed?: number;
-          lessons_total?: number;
-          completed_at?: string | null;
-          created_at?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "module_progress_module_id_fkey";
-            columns: ["module_id"];
-            isOneToOne: false;
-            referencedRelation: "modules";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      user_streaks: {
-        Row: {
-          id: string;
-          user_id: string | null;
-          current_streak: number;
-          longest_streak: number;
-          last_activity_date: string | null;
-          streak_freezes_used: number;
-          streak_freezes_available: number;
-          updated_at: string;
-        };
-        Insert: {
-          id?: string;
-          user_id?: string | null;
-          current_streak?: number;
-          longest_streak?: number;
-          last_activity_date?: string | null;
-          streak_freezes_used?: number;
-          streak_freezes_available?: number;
-          updated_at?: string;
-        };
-        Update: {
-          id?: string;
-          user_id?: string | null;
-          current_streak?: number;
-          longest_streak?: number;
-          last_activity_date?: string | null;
-          streak_freezes_used?: number;
-          streak_freezes_available?: number;
-          updated_at?: string;
-        };
-        Relationships: [];
-      };
-      toughness_model: {
-        Row: {
-          id: string;
-          user_id: string | null;
-          values_score: number;
-          acceptance_score: number;
-          defusion_score: number;
-          present_moment_score: number;
-          self_as_context_score: number;
-          committed_action_score: number;
-          snapshot_date: string;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          user_id?: string | null;
-          values_score?: number;
-          acceptance_score?: number;
-          defusion_score?: number;
-          present_moment_score?: number;
-          self_as_context_score?: number;
-          committed_action_score?: number;
-          snapshot_date?: string;
-          created_at?: string;
-        };
-        Update: {
-          id?: string;
-          user_id?: string | null;
-          values_score?: number;
-          acceptance_score?: number;
-          defusion_score?: number;
-          present_moment_score?: number;
-          self_as_context_score?: number;
-          committed_action_score?: number;
-          snapshot_date?: string;
-          created_at?: string;
-        };
-        Relationships: [];
-      };
-      ai_conversations: {
-        Row: {
-          id: string;
-          user_id: string | null;
-          context_type: AiContextType;
-          context_id: string | null;
-          summary: string | null;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          user_id?: string | null;
-          context_type?: AiContextType;
-          context_id?: string | null;
-          summary?: string | null;
-          created_at?: string;
-        };
-        Update: {
-          id?: string;
-          user_id?: string | null;
-          context_type?: AiContextType;
-          context_id?: string | null;
-          summary?: string | null;
-          created_at?: string;
-        };
-        Relationships: [];
-      };
-      ai_messages: {
-        Row: {
-          id: string;
-          conversation_id: string | null;
-          role: AiMessageRole;
-          content: string;
-          metadata: Json;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          conversation_id?: string | null;
-          role: AiMessageRole;
-          content: string;
-          metadata?: Json;
-          created_at?: string;
-        };
-        Update: {
-          id?: string;
-          conversation_id?: string | null;
-          role?: AiMessageRole;
-          content?: string;
-          metadata?: Json;
-          created_at?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: "ai_messages_conversation_id_fkey";
-            columns: ["conversation_id"];
-            isOneToOne: false;
-            referencedRelation: "ai_conversations";
-            referencedColumns: ["id"];
-          },
-        ];
-      };
-      ai_usage: {
-        Row: {
-          id: string;
-          user_id: string | null;
-          date: string;
-          messages_count: number;
-          input_tokens: number;
-          output_tokens: number;
-        };
-        Insert: {
-          id?: string;
-          user_id?: string | null;
-          date?: string;
-          messages_count?: number;
-          input_tokens?: number;
-          output_tokens?: number;
-        };
-        Update: {
-          id?: string;
-          user_id?: string | null;
-          date?: string;
-          messages_count?: number;
-          input_tokens?: number;
-          output_tokens?: number;
-        };
-        Relationships: [];
-      };
-      notifications: {
-        Row: {
-          id: string;
-          user_id: string | null;
-          type: string;
-          channel: NotificationChannel;
-          status: NotificationStatus;
-          content: Json;
-          scheduled_for: string | null;
-          sent_at: string | null;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          user_id?: string | null;
-          type: string;
-          channel: NotificationChannel;
-          status?: NotificationStatus;
-          content: Json;
-          scheduled_for?: string | null;
-          sent_at?: string | null;
-          created_at?: string;
-        };
-        Update: {
-          id?: string;
-          user_id?: string | null;
-          type?: string;
-          channel?: NotificationChannel;
-          status?: NotificationStatus;
-          content?: Json;
-          scheduled_for?: string | null;
-          sent_at?: string | null;
-          created_at?: string;
-        };
-        Relationships: [];
-      };
-      notification_preferences: {
-        Row: {
-          id: string;
-          user_id: string | null;
-          preferred_channels: Json;
-          quiet_hours_start: string | null;
-          quiet_hours_end: string | null;
-          per_type_settings: Json;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          user_id?: string | null;
-          preferred_channels?: Json;
-          quiet_hours_start?: string | null;
-          quiet_hours_end?: string | null;
-          per_type_settings?: Json;
-          created_at?: string;
-        };
-        Update: {
-          id?: string;
-          user_id?: string | null;
-          preferred_channels?: Json;
-          quiet_hours_start?: string | null;
-          quiet_hours_end?: string | null;
-          per_type_settings?: Json;
-          created_at?: string;
-        };
-        Relationships: [];
-      };
-      blog_posts: {
-        Row: {
-          id: string;
-          title: string;
-          slug: string;
-          content: string;
-          excerpt: string | null;
-          author_id: string | null;
-          status: BlogPostStatus;
-          published_at: string | null;
-          created_at: string;
-          updated_at: string;
-        };
-        Insert: {
-          id?: string;
-          title: string;
-          slug: string;
-          content: string;
-          excerpt?: string | null;
-          author_id?: string | null;
-          status?: BlogPostStatus;
-          published_at?: string | null;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Update: {
-          id?: string;
-          title?: string;
-          slug?: string;
-          content?: string;
-          excerpt?: string | null;
-          author_id?: string | null;
-          status?: BlogPostStatus;
-          published_at?: string | null;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Relationships: [];
-      };
-    };
-    Views: {
-      [_ in never]: never;
-    };
-    Functions: {
-      [_ in never]: never;
-    };
-    Enums: {
-      [_ in never]: never;
-    };
-  };
-}
+export type NotificationChannel = "in_app" | "email" | "sms";

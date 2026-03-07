@@ -46,7 +46,7 @@ export async function checkRateLimit(
   }
 
   const totalMessages = (data ?? []).reduce(
-    (sum, row) => sum + row.messages_count,
+    (sum, row) => sum + (row.messages_count ?? 0),
     0
   );
 

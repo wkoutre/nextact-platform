@@ -115,7 +115,9 @@ export default async function ProgressPage() {
   );
 
   const completedModules = (moduleProgress ?? []).filter(
-    (mp) => mp.lessons_completed >= mp.lessons_total && mp.lessons_total > 0
+    (mp) =>
+      (mp.lessons_completed ?? 0) >= (mp.lessons_total ?? 0) &&
+      (mp.lessons_total ?? 0) > 0
   ).length;
 
   const completedLessons = (lessonProgress ?? []).length;
