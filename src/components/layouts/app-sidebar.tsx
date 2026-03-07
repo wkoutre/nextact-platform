@@ -35,7 +35,7 @@ export function AppSidebar({ userName, avatarUrl }: AppSidebarProps) {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 space-y-0.5 px-3 py-4">
+        <nav aria-label="Huvudnavigering" className="flex-1 space-y-0.5 px-3 py-4">
           {NAV_ITEMS.map((item) => {
             const isActive =
               pathname === item.href || pathname.startsWith(item.href + "/");
@@ -43,6 +43,7 @@ export function AppSidebar({ userName, avatarUrl }: AppSidebarProps) {
               <Link
                 key={item.href}
                 href={item.href}
+                aria-current={isActive ? "page" : undefined}
                 className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
                   isActive
                     ? "border-l-2 border-primary bg-white/10 text-white"
@@ -78,7 +79,7 @@ export function AppSidebar({ userName, avatarUrl }: AppSidebarProps) {
       </aside>
 
       {/* Mobile bottom tab bar */}
-      <nav className="fixed inset-x-0 bottom-0 z-30 flex bg-dark lg:hidden">
+      <nav aria-label="Mobilnavigering" className="fixed inset-x-0 bottom-0 z-30 flex bg-dark lg:hidden">
         {NAV_ITEMS.map((item) => {
           const isActive =
             pathname === item.href || pathname.startsWith(item.href + "/");
@@ -86,8 +87,9 @@ export function AppSidebar({ userName, avatarUrl }: AppSidebarProps) {
             <Link
               key={item.href}
               href={item.href}
+              aria-current={isActive ? "page" : undefined}
               className={`flex flex-1 flex-col items-center gap-1 py-2 text-[10px] font-medium transition-colors ${
-                isActive ? "text-primary" : "text-gray-500"
+                isActive ? "text-white" : "text-gray-500"
               }`}
             >
               <item.icon active={isActive} />
