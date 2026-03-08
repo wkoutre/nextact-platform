@@ -25,40 +25,23 @@ const actProcessLabels: Record<ActProcess, string> = {
   integration: "Integration",
 };
 
-function LockIcon() {
-  return (
-    <svg
-      className="h-5 w-5 text-light-gray"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <rect x="3" y="11" width="18" height="11" rx="2" />
-      <path d="M7 11V7a5 5 0 0110 0v4" />
-    </svg>
-  );
-}
-
-function CheckIcon() {
-  return (
-    <svg
-      className="h-5 w-5 text-success"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="m4.5 12.75 6 6 9-13.5" />
-    </svg>
-  );
-}
+const statusConfig = {
+  completed: {
+    border: "border-l-success",
+    badge: "bg-success/10 text-success",
+    badgeText: "Klar",
+  },
+  in_progress: {
+    border: "border-l-primary",
+    badge: "bg-primary/10 text-primary",
+    badgeText: "Aktiv",
+  },
+  locked: {
+    border: "border-l-light-gray",
+    badge: "bg-light-gray/20 text-light-gray",
+    badgeText: "Låst",
+  },
+};
 
 export function ModuleCard({
   id,
@@ -70,72 +53,54 @@ export function ModuleCard({
   lessonsTotal,
   status,
 }: ModuleCardProps) {
-  const percent =
-    lessonsTotal > 0 ? Math.round((lessonsCompleted / lessonsTotal) * 100) : 0;
+  const config = statusConfig[status];
   const isLocked = status === "locked";
-  const isCompleted = status === "completed";
 
   const content = (
     <div
       className={`
-        rounded-2xl bg-white p-6 transition-all
-        ${isLocked ? "opacity-60" : "shadow-sm hover:shadow-md hover:shadow-navy/5"}
+        rounded-xl border-l-4 bg-white px-6 py-5 transition-all
+        ${config.border}
+        ${isLocked ? "" : "hover:bg-off-white"}
       `}
     >
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-4">
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0 flex-1">
           {/* Module number */}
-          <span
-            className={`
-              flex h-11 w-11 shrink-0 items-center justify-center rounded-xl font-heading text-sm font-bold
-              ${isCompleted ? "bg-success/15 text-success" : ""}
-              ${status === "in_progress" ? "bg-primary/10 text-primary" : ""}
-              ${isLocked ? "bg-light-gray/20 text-light-gray" : ""}
-            `}
+          <p className="font-mono text-xs font-medium text-light-gray">
+            {String(number).padStart(2, "0")}
+          </p>
+
+          {/* Title */}
+          <h3
+            className={`mt-1 font-heading text-xl font-extrabold leading-tight ${
+              isLocked ? "text-light-gray" : "text-navy"
+            }`}
           >
-            {isCompleted ? <CheckIcon /> : number}
-          </span>
+            {title}
+          </h3>
 
-          <div>
-            <h3
-              className={`font-heading text-lg font-semibold ${isLocked ? "text-light-gray" : "text-navy"}`}
-            >
-              {title}
-            </h3>
-            {actProcess && (
-              <p
-                className={`mt-0.5 text-sm ${isLocked ? "text-light-gray" : "text-charcoal"}`}
-              >
-                {actProcessLabels[actProcess]}
-              </p>
-            )}
-          </div>
+          {/* Meta line */}
+          <p className={`mt-1.5 text-sm ${isLocked ? "text-light-gray" : "text-charcoal"}`}>
+            {[
+              actProcess ? actProcessLabels[actProcess] : null,
+              estimatedMinutes ? `${estimatedMinutes} min` : null,
+              !isLocked && lessonsTotal > 0
+                ? `${lessonsCompleted} av ${lessonsTotal} lektioner`
+                : null,
+            ]
+              .filter(Boolean)
+              .join(" · ")}
+          </p>
         </div>
 
-        {isLocked && <LockIcon />}
+        {/* Status badge */}
+        <span
+          className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${config.badge}`}
+        >
+          {config.badgeText}
+        </span>
       </div>
-
-      {/* Progress bar */}
-      {!isLocked && lessonsTotal > 0 && (
-        <div className="mt-4">
-          <div className="h-1.5 overflow-hidden rounded-full bg-off-white-alt">
-            <div
-              className={`h-full rounded-full transition-all ${isCompleted ? "bg-success" : "bg-primary"}`}
-              style={{ width: `${percent}%` }}
-            />
-          </div>
-          <div className="mt-2 flex items-center justify-between text-xs text-charcoal">
-            <span>
-              {lessonsCompleted} av {lessonsTotal} lektioner
-            </span>
-            {estimatedMinutes !== null && <span>{estimatedMinutes} min</span>}
-          </div>
-        </div>
-      )}
-
-      {isLocked && estimatedMinutes !== null && (
-        <p className="mt-4 text-xs text-light-gray">{estimatedMinutes} min</p>
-      )}
     </div>
   );
 
