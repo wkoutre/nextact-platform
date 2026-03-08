@@ -105,7 +105,7 @@ export function ModuleCard({
   );
 
   if (isLocked) {
-    return <div aria-disabled="true">{content}</div>;
+    return <div>{content}</div>;
   }
 
   return (
