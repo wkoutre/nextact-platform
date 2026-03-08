@@ -58,19 +58,21 @@ export default async function DashboardPage() {
         )
       : 0;
 
-  const lessonsRemaining =
+  const lessonsRemaining = Math.max(
+    0,
     (currentModule?.lessons_total ?? 0) -
-    (currentModule?.lessons_completed ?? 0);
+      (currentModule?.lessons_completed ?? 0)
+  );
 
   return (
     <div className="space-y-8">
       {/* Hero card */}
-      <div className="relative overflow-hidden rounded-2xl bg-dark" style={{ minHeight: "220px" }}>
+      <div className="relative min-h-[220px] overflow-hidden rounded-2xl bg-dark">
         {/* Athlete photo — right half */}
         <div className="absolute inset-y-0 right-0 w-1/2">
           <Image
             src={HERO_IMAGE_URL}
-            alt="Atlet"
+            alt=""
             fill
             className="object-cover object-top"
             priority
@@ -81,7 +83,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Text — left half */}
-        <div className="relative z-10 flex flex-col justify-center px-8 py-10 lg:py-12" style={{ maxWidth: "55%" }}>
+        <div className="relative z-10 flex max-w-[55%] flex-col justify-center px-8 py-10 lg:py-12">
           <p className="text-sm font-medium uppercase tracking-widest text-gray-400">
             Välkommen tillbaka
           </p>
