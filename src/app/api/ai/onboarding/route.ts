@@ -56,19 +56,14 @@ export async function POST(request: Request) {
     });
   }
 
-  try {
-    const result = streamText({
-      model,
-      system: ONBOARDING_SYSTEM_PROMPT,
-      messages: messages.map((m) => ({
-        role: m.role as "user" | "assistant",
-        content: m.content,
-      })),
-    });
+  const result = streamText({
+    model,
+    system: ONBOARDING_SYSTEM_PROMPT,
+    messages: messages.map((m) => ({
+      role: m.role as "user" | "assistant",
+      content: m.content,
+    })),
+  });
 
-    return result.toTextStreamResponse();
-  } catch (error) {
-    console.error("streamText error:", error);
-    return NextResponse.json({ error: "AI error" }, { status: 500 });
-  }
+  return result.toDataStreamResponse();
 }

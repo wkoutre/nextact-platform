@@ -1,18 +1,11 @@
 "use client";
 
+import { useChat } from "@ai-sdk/react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { ONBOARDING_INITIAL_MESSAGE } from "@/lib/services/ai/onboarding-prompt";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-
-type Role = "assistant" | "user";
-
-interface Message {
-  id: string;
-  role: Role;
-  content: string;
-}
 
 type Phase = "conversation" | "naming" | "submitting" | "error";
 
@@ -26,10 +19,6 @@ function stripProfilKlar(text: string): string {
 
 function hasProfilKlar(text: string): boolean {
   return text.includes(PROFIL_KLAR_PREFIX);
-}
-
-function generateId(): string {
-  return Math.random().toString(36).slice(2, 10);
 }
 
 // ─── Typing dots ─────────────────────────────────────────────────────────────
@@ -98,27 +87,37 @@ export function OnboardingClient() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: generateId(),
-      role: "assistant",
-      content: ONBOARDING_INITIAL_MESSAGE,
-    },
-  ]);
-
-  const [input, setInput] = useState("");
   const [phase, setPhase] = useState<Phase>("conversation");
-  const [isStreaming, setIsStreaming] = useState(false);
-  const [streamingContent, setStreamingContent] = useState("");
   const [characterName, setCharacterName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Auto-scroll to bottom whenever messages or streaming content changes
+  const { messages, input, setInput, handleSubmit, isLoading, error } =
+    useChat({
+      api: "/api/ai/onboarding",
+      initialMessages: [
+        {
+          id: "initial",
+          role: "assistant",
+          content: ONBOARDING_INITIAL_MESSAGE,
+        },
+      ],
+      onFinish: (message) => {
+        if (hasProfilKlar(message.content)) {
+          setPhase("naming");
+        }
+      },
+      onError: (err) => {
+        setPhase("error");
+        setErrorMessage(err.message || "Något gick fel. Försök igen.");
+      },
+    });
+
+  // Auto-scroll to bottom
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, streamingContent, isStreaming]);
+  }, [messages, isLoading]);
 
   // Focus input when phase changes back to conversation
   useEffect(() => {
@@ -127,106 +126,13 @@ export function OnboardingClient() {
     }
   }, [phase]);
 
-  // Build message history for the API (excluding the initial assistant message
-  // which is not part of the AI conversation — it's a static welcome line)
-  function buildApiMessages(
-    currentMessages: Message[]
-  ): Array<{ role: Role; content: string }> {
-    // The initial assistant message is pre-seeded UI — we skip it from API context
-    // as the system prompt handles the opening context
-    return currentMessages
-      .slice(1) // skip the initial static message
-      .map((m) => ({ role: m.role, content: m.content }));
-  }
-
-  const sendMessage = useCallback(async () => {
-    const text = input.trim();
-    if (!text || isStreaming || phase !== "conversation") return;
-
-    const sentText = text; // save before clearing
-
-    const userMessage: Message = {
-      id: generateId(),
-      role: "user",
-      content: text,
-    };
-
-    const updatedMessages = [...messages, userMessage];
-    setMessages(updatedMessages);
-    setInput("");
-    setIsStreaming(true);
-    setStreamingContent("");
-
-    try {
-      const response = await fetch("/api/ai/onboarding", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: buildApiMessages(updatedMessages),
-        }),
-      });
-
-      if (!response.ok || !response.body) {
-        const text = await response.text().catch(() => "");
-        throw new Error(text || "Servern svarade med ett fel.");
-      }
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let accumulated = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        const chunk = decoder.decode(value, { stream: true });
-        accumulated += chunk;
-        setStreamingContent(accumulated);
-      }
-
-      // Stream complete — commit the final message
-      if (!accumulated.trim()) {
-        throw new Error("Inget svar mottogs. Försök igen.");
-      }
-
-      const finalMessage: Message = {
-        id: generateId(),
-        role: "assistant",
-        content: accumulated,
-      };
-
-      setMessages((prev) => [...prev, finalMessage]);
-      setStreamingContent("");
-      setIsStreaming(false);
-
-      // Check if we've reached the end of the conversation phase
-      if (hasProfilKlar(accumulated)) {
-        setPhase("naming");
-      }
-    } catch {
-      // Roll back the user message so retry doesn't duplicate it
-      setMessages(prev => {
-        const lastUserIdx = [...prev].reverse().findIndex(m => m.role === "user");
-        if (lastUserIdx === -1) return prev;
-        const idx = prev.length - 1 - lastUserIdx;
-        return [...prev.slice(0, idx), ...prev.slice(idx + 1)];
-      });
-      setInput(sentText);
-      setIsStreaming(false);
-      setStreamingContent("");
+  // Show error from useChat
+  useEffect(() => {
+    if (error) {
       setPhase("error");
-      setErrorMessage("Något gick fel. Försök skicka ditt meddelande igen.");
+      setErrorMessage(error.message || "Något gick fel. Försök igen.");
     }
-  }, [input, isStreaming, messages, phase]);
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault();
-        void sendMessage();
-      }
-    },
-    [sendMessage]
-  );
+  }, [error]);
 
   const handleFinalize = useCallback(async () => {
     const name = characterName.trim();
@@ -234,33 +140,26 @@ export function OnboardingClient() {
 
     setPhase("submitting");
 
-    // Build full message history for finalize (excluding initial static message)
-    const apiMessages = buildApiMessages(messages);
+    const apiMessages = messages
+      .slice(1) // skip initial static message
+      .map((m) => ({ role: m.role, content: m.content }));
 
     try {
       const response = await fetch("/api/ai/onboarding/finalize", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: apiMessages,
-          characterName: name,
-        }),
+        body: JSON.stringify({ messages: apiMessages, characterName: name }),
       });
 
-      if (!response.ok) {
-        throw new Error("Finalize failed");
-      }
-
+      if (!response.ok) throw new Error("Finalize failed");
       router.push("/learn");
     } catch {
       setPhase("error");
-      setErrorMessage(
-        "Det gick inte att spara din profil just nu. Prova igen."
-      );
+      setErrorMessage("Det gick inte att spara din profil just nu. Prova igen.");
     }
   }, [characterName, messages, phase, router]);
 
-  // The "visible" last assistant message index for streaming awareness
+  const isStreaming = isLoading;
   const lastAssistantIndex = messages
     .map((m, i) => (m.role === "assistant" ? i : -1))
     .filter((i) => i !== -1)
@@ -288,32 +187,22 @@ export function OnboardingClient() {
         <div className="mx-auto max-w-2xl space-y-6">
           {messages.map((message, index) => {
             if (message.role === "assistant") {
-              // Show "Programmet" label only above the very first assistant message
-              const isFirst = index === 0 && message.role === "assistant";
+              const isFirst = index === 0;
+              const isStreamingThis = isStreaming && index === lastAssistantIndex;
               return (
                 <AssistantMessage
                   key={message.id}
                   content={message.content}
                   isFirst={isFirst}
-                  isStreaming={false}
+                  isStreaming={isStreamingThis}
                 />
               );
             }
             return <UserMessage key={message.id} content={message.content} />;
           })}
 
-          {/* Streaming in-progress assistant message */}
-          {isStreaming && streamingContent && (
-            <AssistantMessage
-              key="streaming"
-              content={streamingContent}
-              isFirst={lastAssistantIndex === undefined}
-              isStreaming={true}
-            />
-          )}
-
           {/* Waiting dots — shown after user sends, before first chunk */}
-          {isStreaming && !streamingContent && (
+          {isStreaming && (
             <div className="border-l-2 border-primary/25 pl-4">
               <TypingDots />
             </div>
@@ -381,22 +270,15 @@ export function OnboardingClient() {
       </div>
 
       {/* ── Sticky input bar ────────────────────────────────────── */}
-      {phase === "conversation" || phase === "error" ? (
+      {(phase === "conversation" || phase === "error") && (
         <div className="flex-none border-t border-navy/8 bg-white px-5 py-4 sm:px-8">
           <div className="mx-auto max-w-2xl">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                void sendMessage();
-              }}
-              className="flex gap-3"
-            >
+            <form onSubmit={handleSubmit} className="flex gap-3">
               <input
                 ref={inputRef}
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
                 placeholder="Skriv här..."
                 disabled={isStreaming || phase === "error"}
                 autoComplete="off"
@@ -412,7 +294,7 @@ export function OnboardingClient() {
             </form>
           </div>
         </div>
-      ) : null}
+      )}
     </div>
   );
 }
