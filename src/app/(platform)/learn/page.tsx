@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { ModuleCard } from "@/components/features/lms/module-card";
 import { getModuleAccess } from "@/lib/services/lms/module-unlock";
@@ -15,6 +16,12 @@ export default async function ModuleListPage() {
   } = await supabase.auth.getUser();
 
   const userId = user!.id;
+
+  const { data: characterProfile } = await supabase
+    .from("character_profiles")
+    .select("character_name")
+    .eq("user_id", userId)
+    .maybeSingle();
 
   // Fetch modules, progress, and lesson counts in parallel
   const [modulesResult, progressResult, lessonCountsResult] = await Promise.all(
@@ -86,6 +93,24 @@ export default async function ModuleListPage() {
 
   return (
     <div className="space-y-6">
+      {!characterProfile && (
+        <Link
+          href="/onboarding"
+          className="group flex items-center gap-4 rounded-2xl border border-primary/20 bg-primary/5 px-5 py-4 transition-colors hover:bg-primary/10"
+        >
+          <div className="flex-1">
+            <p className="font-heading text-sm font-semibold text-navy">
+              Personalisera ditt program
+            </p>
+            <p className="mt-0.5 text-sm text-charcoal">
+              Skapa din karaktär så anpassar vi innehållet efter dig.
+            </p>
+          </div>
+          <span className="shrink-0 font-heading text-sm font-bold text-primary group-hover:underline">
+            Kom igång →
+          </span>
+        </Link>
+      )}
       <div>
         <h1 className="font-heading text-2xl font-bold text-navy sm:text-3xl">
           Ditt Program
