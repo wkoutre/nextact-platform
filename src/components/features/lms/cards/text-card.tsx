@@ -2,44 +2,34 @@
 
 import { motion } from "framer-motion";
 
-type TextCardProps = {
-  title?: string;
-  content: string;
-  onContinue?: () => void;
-};
+type TextCardProps = { title?: string; content: string; onContinue?: () => void };
 
 export function TextCard({ title, content, onContinue }: TextCardProps) {
   return (
-    <div className="flex h-dvh flex-col items-center justify-center bg-off-white p-6">
+    <div className="w-full bg-primary px-6 py-10 sm:px-10 sm:py-12">
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
+        initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="mx-auto w-full max-w-2xl"
+        transition={{ duration: 0.4 }}
+        className="mx-auto max-w-2xl"
       >
         {title && (
-          <h2 className="mb-6 font-heading text-2xl font-bold text-navy md:text-3xl">
+          <h2 className="font-heading text-3xl font-extrabold text-white sm:text-4xl">
             {title}
           </h2>
         )}
-        <div className="space-y-4 text-lg leading-relaxed text-charcoal">
+        <div className="mt-4 space-y-3 text-base leading-relaxed text-white/90">
           {content.split("\n\n").map((paragraph, i) => (
             <p key={i}>{paragraph}</p>
           ))}
         </div>
         {onContinue && (
-          <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
+          <button
             onClick={onContinue}
-            className="mt-8 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 font-heading text-sm font-semibold text-white shadow-sm transition-all hover:bg-primary-hover"
+            className="mt-8 rounded-full border-2 border-white bg-white px-6 py-2.5 font-heading text-sm font-bold text-primary transition-all hover:bg-white/90"
           >
-            Fortsätt
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-            </svg>
-          </motion.button>
+            Till nästa
+          </button>
         )}
       </motion.div>
     </div>

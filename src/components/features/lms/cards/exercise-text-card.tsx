@@ -1,65 +1,49 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
 
 type ExerciseTextCardProps = {
   prompt: string;
   placeholder?: string;
   maxLength?: number;
-  onSubmit: (response: string) => void;
+  onSubmit?: (response: string) => void;
 };
 
-export function ExerciseTextCard({
-  prompt,
-  placeholder = "Skriv ditt svar här...",
-  maxLength = 2000,
-  onSubmit,
-}: ExerciseTextCardProps) {
+export function ExerciseTextCard({ prompt, placeholder, maxLength, onSubmit }: ExerciseTextCardProps) {
   const [value, setValue] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
   function handleSubmit() {
-    if (value.trim().length === 0) return;
+    if (!value.trim()) return;
+    onSubmit?.(value);
     setSubmitted(true);
-    onSubmit(value.trim());
   }
 
   return (
-    <div className="flex h-dvh items-center justify-center bg-off-white p-6">
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="mx-auto flex w-full max-w-2xl flex-col gap-6"
-      >
-        <h2 className="font-heading text-xl font-bold text-navy md:text-2xl">
-          {prompt}
-        </h2>
-
-        <div className="relative">
-          <textarea
-            value={value}
-            onChange={(e) => setValue(e.target.value.slice(0, maxLength))}
-            placeholder={placeholder}
-            disabled={submitted}
-            rows={6}
-            className="w-full resize-none rounded-xl border border-light-gray bg-white p-4 text-lg text-navy placeholder:text-light-gray focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/40 disabled:opacity-60"
-          />
-          <span className="absolute right-3 bottom-3 text-xs text-light-gray">
-            {value.length}/{maxLength}
-          </span>
-        </div>
-
-        <button
-          type="button"
-          onClick={handleSubmit}
-          disabled={value.trim().length === 0 || submitted}
-          className="self-end rounded-[3rem] bg-primary px-8 py-3 font-heading text-base font-semibold text-white shadow-sm shadow-primary/20 transition-all hover:bg-primary-hover disabled:opacity-50 disabled:pointer-events-none"
-        >
-          {submitted ? "Skickat" : "Skicka"}
-        </button>
-      </motion.div>
+    <div className="w-full bg-white px-6 py-8 sm:px-10">
+      <div className="mx-auto max-w-2xl">
+        <h3 className="font-heading text-xl font-bold text-primary">{prompt}</h3>
+        <textarea
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder={placeholder ?? "Skriv ditt svar här..."}
+          maxLength={maxLength}
+          disabled={submitted}
+          rows={5}
+          className="mt-4 w-full rounded-lg border-2 border-primary bg-[#E8EEF5] px-4 py-3 text-base text-navy placeholder-charcoal/50 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:opacity-60"
+        />
+        {!submitted ? (
+          <button
+            onClick={handleSubmit}
+            disabled={!value.trim()}
+            className="mt-4 rounded-full bg-primary px-6 py-2.5 font-heading text-sm font-bold text-white transition hover:bg-primary-hover disabled:opacity-40"
+          >
+            Skicka svar
+          </button>
+        ) : (
+          <p className="mt-3 text-sm font-medium text-success">Svar sparat!</p>
+        )}
+      </div>
     </div>
   );
 }

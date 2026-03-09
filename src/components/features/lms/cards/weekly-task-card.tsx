@@ -1,52 +1,29 @@
 "use client";
-import { useState } from "react";
 
-type WeeklyTaskCardProps = {
-  tasks: string[];
-  moduleTitle?: string;
-};
+type WeeklyTaskCardProps = { tasks: string[]; moduleTitle?: string };
 
 export function WeeklyTaskCard({ tasks, moduleTitle }: WeeklyTaskCardProps) {
-  const [checked, setChecked] = useState<boolean[]>(tasks.map(() => false));
-
   return (
-    <div className="flex h-full flex-col items-center justify-center p-8">
-      <div className="w-full max-w-md rounded-2xl bg-blue-50 p-8">
-        <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-blue-600">
-          Veckans uppgifter
-        </p>
+    <div className="w-full bg-[#2E3347] px-6 py-8 sm:px-10 sm:py-10">
+      <div className="mx-auto max-w-2xl">
+        <h2 className="font-heading text-2xl font-bold text-white">
+          Veckans träningsprogram
+        </h2>
         {moduleTitle && (
-          <h2 className="mb-6 font-montserrat text-2xl font-bold text-gray-900">
-            {moduleTitle}
-          </h2>
+          <p className="mt-1 text-sm text-white/60">{moduleTitle}</p>
         )}
-        <ul className="space-y-4">
-          {tasks.map((task, i) => (
-            <li key={i} className="flex items-start gap-3">
-              <button
-                onClick={() =>
-                  setChecked((c) => c.map((v, j) => (j === i ? !v : v)))
-                }
-                className={`mt-0.5 h-5 w-5 shrink-0 rounded border-2 transition-colors ${
-                  checked[i]
-                    ? "border-blue-600 bg-blue-600"
-                    : "border-gray-400 bg-white"
-                }`}
-                aria-label={checked[i] ? "Avmarkera" : "Markera"}
-              />
-              <span
-                className={`font-source-sans text-gray-700 transition-opacity ${
-                  checked[i] ? "line-through opacity-50" : ""
-                }`}
-              >
-                {task}
-              </span>
-            </li>
-          ))}
-        </ul>
-        <p className="mt-6 text-sm text-gray-500">
-          Du får dessa uppgifter via SMS inför din nästa träning.
+        <p className="mt-4 text-sm leading-relaxed text-white/80">
+          I början av varje modul kommer du få några uppgifter eller övningar som du ska göra under veckan som kommer. Kom ihåg att ju mer du övar, desto mer kommer du få ut av programmet.
         </p>
+        <div className="mt-6 space-y-4">
+          {tasks.map((task, i) => (
+            <div key={i}>
+              <h3 className="font-heading text-base font-semibold text-white">
+                {i + 1}. {task}
+              </h3>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

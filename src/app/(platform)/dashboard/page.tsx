@@ -1,14 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: "Dashboard — Next Act",
 };
-
-const HERO_IMAGE_URL =
-  "https://jdpqgfwzzxypjfhrtcsc.supabase.co/storage/v1/object/public/Next%20Act%20arbete/rasmus%20elm.png";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -66,51 +62,34 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      {/* Hero card */}
-      <div className="relative min-h-[220px] overflow-hidden rounded-2xl bg-dark">
-        {/* Athlete photo — right half */}
-        <div className="absolute inset-y-0 right-0 w-1/2">
-          <Image
-            src={HERO_IMAGE_URL}
-            alt=""
-            fill
-            className="object-cover object-top"
-            priority
-            unoptimized
-          />
-          {/* Gradient fade from dark to transparent */}
-          <div className="absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-dark to-transparent" />
-        </div>
-
-        {/* Text — left half */}
-        <div className="relative z-10 flex max-w-[55%] flex-col justify-center px-8 py-10 lg:py-12">
-          <p className="text-sm font-medium uppercase tracking-widest text-gray-400">
-            Välkommen tillbaka
-          </p>
-          <h1 className="mt-2 font-heading text-3xl font-extrabold text-white lg:text-4xl">
-            {displayName}
-          </h1>
-          <p className="mt-2 text-sm text-gray-400">
-            {currentModule
-              ? `${lessonsRemaining} lektion${lessonsRemaining !== 1 ? "er" : ""} kvar i pågående modul`
-              : "Starta din första lektion"}
-          </p>
-          <Link
-            href="/learn"
-            className="mt-6 inline-flex w-fit items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
-          >
-            Fortsätt träna
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-            </svg>
-          </Link>
-        </div>
+      {/* Welcome card */}
+      <div className="rounded-2xl bg-white px-8 py-8 shadow-sm">
+        <p className="text-sm font-medium uppercase tracking-widest text-charcoal">
+          Välkommen tillbaka
+        </p>
+        <h1 className="mt-1 font-heading text-3xl font-extrabold text-navy lg:text-4xl">
+          {displayName}
+        </h1>
+        <p className="mt-2 text-sm text-charcoal">
+          {currentModule
+            ? `${lessonsRemaining} lektion${lessonsRemaining !== 1 ? "er" : ""} kvar i pågående modul`
+            : "Starta din första lektion"}
+        </p>
+        <Link
+          href="/learn"
+          className="mt-5 inline-flex w-fit items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
+        >
+          Fortsätt träna
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+          </svg>
+        </Link>
       </div>
 
       {/* Stats row */}
       <div className="grid gap-4 sm:grid-cols-3">
         {/* Streak */}
-        <div className="rounded-2xl bg-off-white p-6">
+        <div className="rounded-2xl bg-white p-6 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-widest text-charcoal">
             Dagar i rad
           </p>
@@ -127,7 +106,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Module progress */}
-        <div className="rounded-2xl bg-off-white p-6">
+        <div className="rounded-2xl bg-white p-6 shadow-sm">
           <p className="text-xs font-semibold uppercase tracking-widest text-charcoal">
             Modulframsteg
           </p>
@@ -142,15 +121,15 @@ export default async function DashboardPage() {
         </div>
 
         {/* Bollplank */}
-        <div className="flex flex-col justify-between rounded-2xl bg-dark p-6">
+        <div className="flex flex-col justify-between rounded-2xl border-2 border-primary bg-white p-6 shadow-sm">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-gray-400">
+            <p className="text-xs font-semibold uppercase tracking-widest text-charcoal">
               Bollplank
             </p>
-            <p className="mt-2 font-heading text-lg font-bold text-white">
+            <p className="mt-2 font-heading text-lg font-bold text-navy">
               Ditt mentala bollplank
             </p>
-            <p className="mt-1 text-sm text-gray-400">
+            <p className="mt-1 text-sm text-charcoal">
               Ställ frågor, bearbeta tankar
             </p>
           </div>
@@ -173,7 +152,7 @@ export default async function DashboardPage() {
             {recentLessons.map((lesson) => (
               <div
                 key={lesson.lesson_id}
-                className="flex items-center gap-3 rounded-xl bg-off-white p-3"
+                className="flex items-center gap-3 rounded-xl bg-white p-3 shadow-sm"
               >
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-success/15 text-success">
                   <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

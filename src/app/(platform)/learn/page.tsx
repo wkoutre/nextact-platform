@@ -95,6 +95,16 @@ export default async function ModuleListPage() {
         </p>
       </div>
 
+      {/* Module map */}
+      <div className="overflow-hidden rounded-2xl bg-white p-4 shadow-sm">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="https://jdpqgfwzzxypjfhrtcsc.supabase.co/storage/v1/object/public/Next%20Act%20arbete/map%207%20punkter.svg"
+          alt="Programöversikt"
+          className="w-full"
+        />
+      </div>
+
       <div className="flex flex-col gap-4">{moduleCards}</div>
     </div>
   );

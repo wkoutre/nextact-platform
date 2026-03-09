@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { AppSidebar } from "@/components/layouts/app-sidebar";
+import { TopBar } from "@/components/layouts/top-bar";
 
 export default async function PlatformLayout({
   children,
@@ -20,13 +20,10 @@ export default async function PlatformLayout({
     user.user_metadata?.display_name ?? user.email?.split("@")[0] ?? null;
 
   return (
-    <div className="min-h-screen bg-white">
-      <AppSidebar
-        userName={displayName}
-        avatarUrl={user.user_metadata?.avatar_url ?? null}
-      />
-      <main className="pb-20 lg:ml-64 lg:pb-0">
-        <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+    <div className="min-h-screen bg-[#E8EEF5]">
+      <TopBar userName={displayName} />
+      <main className="pt-14">
+        <div className="mx-auto max-w-4xl px-4 py-6 sm:px-6">
           {children}
         </div>
       </main>

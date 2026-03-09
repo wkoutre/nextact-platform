@@ -231,13 +231,13 @@ export function LessonFeed({
   return (
     <div
       ref={containerRef}
-      className="mx-auto h-dvh max-w-3xl overflow-y-auto scroll-smooth snap-y snap-mandatory"
+      className="mx-auto max-w-3xl"
     >
       {blocks.map((block, index) => (
         <div
           key={index}
           ref={setCardRef(index)}
-          className="h-dvh snap-start snap-always"
+          className="w-full"
         >
           {renderBlock(block, index)}
         </div>
