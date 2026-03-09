@@ -177,12 +177,17 @@ export default async function LessonPage({ params }: Props) {
   const { moduleId, lessonId } = await params;
   const supabase = await createClient();
 
-  // Fetch lesson and sibling lessons in parallel
-  const [lessonResult, siblingsResult] = await Promise.all([
+  // Fetch lesson, module, and sibling lessons in parallel
+  const [lessonResult, moduleResult, siblingsResult] = await Promise.all([
     supabase
       .from("lessons")
       .select("id, title, content, order, module_id")
       .eq("id", lessonId)
+      .single(),
+    supabase
+      .from("modules")
+      .select("id, title")
+      .eq("id", moduleId)
       .single(),
     supabase
       .from("lessons")
@@ -194,6 +199,8 @@ export default async function LessonPage({ params }: Props) {
 
   const lesson = lessonResult.data;
   if (!lesson) notFound();
+
+  const moduleName = moduleResult.data?.title ?? "";
 
   // Find next lesson
   const siblings = siblingsResult.data ?? [];
@@ -215,5 +222,13 @@ export default async function LessonPage({ params }: Props) {
     nextLesson?.id ?? null
   );
 
-  return <LessonClient blocks={blocks} lessonId={lessonId} />;
+  return (
+    <LessonClient
+      blocks={blocks}
+      lessonId={lessonId}
+      moduleName={moduleName}
+      moduleHref={`/learn/${moduleId}`}
+      lessonTitle={lesson.title}
+    />
+  );
 }

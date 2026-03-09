@@ -111,7 +111,7 @@ export function VimeoPlayer({
 
   return (
     <div
-      className={`relative overflow-hidden rounded-2xl bg-black ${className}`}
+      className={`relative overflow-hidden bg-black ${className || "rounded-2xl"}`}
     >
       <div ref={containerRef} className="aspect-video w-full" />
 

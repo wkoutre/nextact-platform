@@ -231,7 +231,7 @@ export function LessonFeed({
   return (
     <div
       ref={containerRef}
-      className="mx-auto max-w-3xl"
+      className="mx-auto max-w-4xl"
     >
       {blocks.map((block, index) => (
         <div
