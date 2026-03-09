@@ -103,6 +103,48 @@ export type Database = {
         }
         Relationships: []
       }
+      character_profiles: {
+        Row: {
+          id: string
+          user_id: string
+          character_name: string
+          valued_direction: string
+          main_obstacle: string
+          current_behavior: string | null
+          context: string
+          context_detail: string | null
+          profile_summary: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          character_name: string
+          valued_direction: string
+          main_obstacle: string
+          current_behavior?: string | null
+          context?: string
+          context_detail?: string | null
+          profile_summary?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          character_name?: string
+          valued_direction?: string
+          main_obstacle?: string
+          current_behavior?: string | null
+          context?: string
+          context_detail?: string | null
+          profile_summary?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       blog_posts: {
         Row: {
           author_id: string | null
