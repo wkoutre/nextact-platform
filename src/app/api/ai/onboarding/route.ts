@@ -37,9 +37,7 @@ export async function POST(request: Request) {
   }
 
   const anthropicProvider = createAnthropic({ apiKey });
-  const model = anthropicProvider(
-    process.env.AI_MODEL ?? "claude-haiku-4-5-20251001"
-  );
+  const modelId = process.env.AI_MODEL ?? "claude-haiku-4-5-20251001";
 
   // Crisis detection on latest user message
   const latestUserMessage = messages.findLast((m) => m.role === "user");
@@ -56,20 +54,13 @@ export async function POST(request: Request) {
     });
   }
 
-  console.log("[onboarding] key prefix:", apiKey.slice(0, 10));
-  console.log("[onboarding] model:", process.env.AI_MODEL ?? "claude-3-5-haiku-20241022");
-  console.log("[onboarding] messages:", JSON.stringify(messages));
-
   const result = streamText({
-    model: anthropicProvider(process.env.AI_MODEL ?? "claude-3-5-haiku-20241022"),
+    model: anthropicProvider(modelId),
     system: ONBOARDING_SYSTEM_PROMPT,
     messages: messages.map((m) => ({
       role: m.role as "user" | "assistant",
       content: m.content,
     })),
-    onError: ({ error }) => {
-      console.error("[onboarding] streamText error:", JSON.stringify(error));
-    },
   });
 
   return result.toUIMessageStreamResponse();
