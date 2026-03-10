@@ -7,7 +7,8 @@
 -- ---------------------------------------------------------------------------
 
 -- Extract role from JWT app_metadata (O(1) for RLS)
-CREATE OR REPLACE FUNCTION auth.role()
+-- Note: Must live in public schema on Supabase managed platform (auth schema is locked)
+CREATE OR REPLACE FUNCTION public.user_role()
 RETURNS text AS $$
   SELECT coalesce(
     current_setting('request.jwt.claims', true)::json
@@ -271,7 +272,7 @@ ALTER TABLE public.blog_posts ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "profiles_select_own_or_admin" ON public.profiles
   FOR SELECT USING (
-    auth.uid() = id OR auth.role() = 'admin'
+    auth.uid() = id OR public.user_role() = 'admin'
   );
 
 CREATE POLICY "profiles_update_own" ON public.profiles
@@ -283,7 +284,7 @@ CREATE POLICY "profiles_update_own" ON public.profiles
   );
 
 CREATE POLICY "profiles_update_admin" ON public.profiles
-  FOR UPDATE USING (auth.role() = 'admin');
+  FOR UPDATE USING (public.user_role() = 'admin');
 
 -- ---- content tables (programs, modules, lessons) ----
 
@@ -291,42 +292,42 @@ CREATE POLICY "programs_select_authenticated" ON public.programs
   FOR SELECT TO authenticated USING (true);
 
 CREATE POLICY "programs_insert_admin" ON public.programs
-  FOR INSERT WITH CHECK (auth.role() = 'admin');
+  FOR INSERT WITH CHECK (public.user_role() = 'admin');
 
 CREATE POLICY "programs_update_admin" ON public.programs
-  FOR UPDATE USING (auth.role() = 'admin');
+  FOR UPDATE USING (public.user_role() = 'admin');
 
 CREATE POLICY "programs_delete_admin" ON public.programs
-  FOR DELETE USING (auth.role() = 'admin');
+  FOR DELETE USING (public.user_role() = 'admin');
 
 CREATE POLICY "modules_select_authenticated" ON public.modules
   FOR SELECT TO authenticated USING (true);
 
 CREATE POLICY "modules_insert_admin" ON public.modules
-  FOR INSERT WITH CHECK (auth.role() = 'admin');
+  FOR INSERT WITH CHECK (public.user_role() = 'admin');
 
 CREATE POLICY "modules_update_admin" ON public.modules
-  FOR UPDATE USING (auth.role() = 'admin');
+  FOR UPDATE USING (public.user_role() = 'admin');
 
 CREATE POLICY "modules_delete_admin" ON public.modules
-  FOR DELETE USING (auth.role() = 'admin');
+  FOR DELETE USING (public.user_role() = 'admin');
 
 CREATE POLICY "lessons_select_authenticated" ON public.lessons
   FOR SELECT TO authenticated USING (true);
 
 CREATE POLICY "lessons_insert_admin" ON public.lessons
-  FOR INSERT WITH CHECK (auth.role() = 'admin');
+  FOR INSERT WITH CHECK (public.user_role() = 'admin');
 
 CREATE POLICY "lessons_update_admin" ON public.lessons
-  FOR UPDATE USING (auth.role() = 'admin');
+  FOR UPDATE USING (public.user_role() = 'admin');
 
 CREATE POLICY "lessons_delete_admin" ON public.lessons
-  FOR DELETE USING (auth.role() = 'admin');
+  FOR DELETE USING (public.user_role() = 'admin');
 
 -- ---- lesson_progress ----
 
 CREATE POLICY "lesson_progress_select_own_or_admin" ON public.lesson_progress
-  FOR SELECT USING (auth.uid() = user_id OR auth.role() = 'admin');
+  FOR SELECT USING (auth.uid() = user_id OR public.user_role() = 'admin');
 
 CREATE POLICY "lesson_progress_insert_own" ON public.lesson_progress
   FOR INSERT WITH CHECK (auth.uid() = user_id);
@@ -337,7 +338,7 @@ CREATE POLICY "lesson_progress_update_own" ON public.lesson_progress
 -- ---- module_progress ----
 
 CREATE POLICY "module_progress_select_own_or_admin" ON public.module_progress
-  FOR SELECT USING (auth.uid() = user_id OR auth.role() = 'admin');
+  FOR SELECT USING (auth.uid() = user_id OR public.user_role() = 'admin');
 
 CREATE POLICY "module_progress_insert_own" ON public.module_progress
   FOR INSERT WITH CHECK (auth.uid() = user_id);
@@ -348,7 +349,7 @@ CREATE POLICY "module_progress_update_own" ON public.module_progress
 -- ---- user_streaks ----
 
 CREATE POLICY "user_streaks_select_own_or_admin" ON public.user_streaks
-  FOR SELECT USING (auth.uid() = user_id OR auth.role() = 'admin');
+  FOR SELECT USING (auth.uid() = user_id OR public.user_role() = 'admin');
 
 CREATE POLICY "user_streaks_insert_own" ON public.user_streaks
   FOR INSERT WITH CHECK (auth.uid() = user_id);
@@ -359,7 +360,7 @@ CREATE POLICY "user_streaks_update_own" ON public.user_streaks
 -- ---- toughness_model ----
 
 CREATE POLICY "toughness_model_select_own_or_admin" ON public.toughness_model
-  FOR SELECT USING (auth.uid() = user_id OR auth.role() = 'admin');
+  FOR SELECT USING (auth.uid() = user_id OR public.user_role() = 'admin');
 
 CREATE POLICY "toughness_model_insert_own" ON public.toughness_model
   FOR INSERT WITH CHECK (auth.uid() = user_id);
@@ -370,7 +371,7 @@ CREATE POLICY "toughness_model_update_own" ON public.toughness_model
 -- ---- ai_conversations ----
 
 CREATE POLICY "ai_conversations_select_own_or_admin" ON public.ai_conversations
-  FOR SELECT USING (auth.uid() = user_id OR auth.role() = 'admin');
+  FOR SELECT USING (auth.uid() = user_id OR public.user_role() = 'admin');
 
 CREATE POLICY "ai_conversations_insert_own" ON public.ai_conversations
   FOR INSERT WITH CHECK (auth.uid() = user_id);
@@ -381,7 +382,7 @@ CREATE POLICY "ai_messages_select_own_or_admin" ON public.ai_messages
   FOR SELECT USING (
     EXISTS (
       SELECT 1 FROM public.ai_conversations c
-      WHERE c.id = conversation_id AND (c.user_id = auth.uid() OR auth.role() = 'admin')
+      WHERE c.id = conversation_id AND (c.user_id = auth.uid() OR public.user_role() = 'admin')
     )
   );
 
@@ -396,7 +397,7 @@ CREATE POLICY "ai_messages_insert_own" ON public.ai_messages
 -- ---- ai_usage ----
 
 CREATE POLICY "ai_usage_select_own_or_admin" ON public.ai_usage
-  FOR SELECT USING (auth.uid() = user_id OR auth.role() = 'admin');
+  FOR SELECT USING (auth.uid() = user_id OR public.user_role() = 'admin');
 
 CREATE POLICY "ai_usage_insert_own" ON public.ai_usage
   FOR INSERT WITH CHECK (auth.uid() = user_id);
@@ -407,22 +408,22 @@ CREATE POLICY "ai_usage_update_own" ON public.ai_usage
 -- ---- notifications ----
 
 CREATE POLICY "notifications_select_own_or_admin" ON public.notifications
-  FOR SELECT USING (auth.uid() = user_id OR auth.role() = 'admin');
+  FOR SELECT USING (auth.uid() = user_id OR public.user_role() = 'admin');
 
 CREATE POLICY "notifications_insert_admin" ON public.notifications
-  FOR INSERT WITH CHECK (auth.role() = 'admin');
+  FOR INSERT WITH CHECK (public.user_role() = 'admin');
 
 CREATE POLICY "notifications_update_own_read" ON public.notifications
   FOR UPDATE USING (auth.uid() = user_id)
   WITH CHECK (status = 'read');
 
 CREATE POLICY "notifications_update_admin" ON public.notifications
-  FOR UPDATE USING (auth.role() = 'admin');
+  FOR UPDATE USING (public.user_role() = 'admin');
 
 -- ---- notification_preferences ----
 
 CREATE POLICY "notification_preferences_select_own_or_admin" ON public.notification_preferences
-  FOR SELECT USING (auth.uid() = user_id OR auth.role() = 'admin');
+  FOR SELECT USING (auth.uid() = user_id OR public.user_role() = 'admin');
 
 CREATE POLICY "notification_preferences_insert_own" ON public.notification_preferences
   FOR INSERT WITH CHECK (auth.uid() = user_id);
@@ -431,20 +432,20 @@ CREATE POLICY "notification_preferences_update_own" ON public.notification_prefe
   FOR UPDATE USING (auth.uid() = user_id);
 
 CREATE POLICY "notification_preferences_update_admin" ON public.notification_preferences
-  FOR UPDATE USING (auth.role() = 'admin');
+  FOR UPDATE USING (public.user_role() = 'admin');
 
 -- ---- blog_posts ----
 
 CREATE POLICY "blog_posts_select_published_or_admin" ON public.blog_posts
   FOR SELECT USING (
-    status = 'published' OR auth.role() = 'admin'
+    status = 'published' OR public.user_role() = 'admin'
   );
 
 CREATE POLICY "blog_posts_insert_admin" ON public.blog_posts
-  FOR INSERT WITH CHECK (auth.role() = 'admin');
+  FOR INSERT WITH CHECK (public.user_role() = 'admin');
 
 CREATE POLICY "blog_posts_update_admin" ON public.blog_posts
-  FOR UPDATE USING (auth.role() = 'admin');
+  FOR UPDATE USING (public.user_role() = 'admin');
 
 CREATE POLICY "blog_posts_delete_admin" ON public.blog_posts
-  FOR DELETE USING (auth.role() = 'admin');
+  FOR DELETE USING (public.user_role() = 'admin');
