@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { ModuleCard } from "@/components/features/lms/module-card";
+import { JourneyMap } from "@/components/features/lms/journey-map";
 import { getModuleAccess } from "@/lib/services/lms/module-unlock";
 import type { ActProcess } from "@/lib/supabase/types";
 
@@ -61,13 +62,19 @@ export default async function ModuleListPage() {
   // Determine lock/active/completed status using the sequential unlock service
   const moduleAccess = await getModuleAccess(supabase, userId);
 
+  const journeySteps = modules.map((mod) => {
+    const access = moduleAccess.get(mod.id) ?? "locked";
+    const status: "completed" | "active" | "locked" =
+      access === "completed" ? "completed" : access === "active" ? "active" : "locked";
+    return { id: mod.id, order: mod.order, title: mod.title, status };
+  });
+
   const moduleCards = modules.map((mod) => {
     const mp = progressMap.get(mod.id);
     const totalLessons = lessonCountMap.get(mod.id) ?? mp?.lessons_total ?? 0;
     const completedLessons = mp?.lessons_completed ?? 0;
 
     const access = moduleAccess.get(mod.id) ?? "locked";
-    // ModuleCard uses "in_progress" where our service uses "active"
     const status: "completed" | "in_progress" | "locked" =
       access === "completed"
         ? "completed"
@@ -111,25 +118,20 @@ export default async function ModuleListPage() {
           </span>
         </Link>
       )}
+
       <div>
         <h1 className="font-heading text-2xl font-bold text-navy sm:text-3xl">
-          Ditt Program
+          {characterProfile ? `${characterProfile.character_name}s resa` : "Din resa"}
         </h1>
         <p className="mt-1 text-charcoal">
-          Sju moduler som bygger din mentala styrka steg för steg.
+          Klicka på ett steg på kartan för att fortsätta.
         </p>
       </div>
 
-      {/* Module map */}
-      <div className="overflow-hidden rounded-2xl bg-white p-4 shadow-sm">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="https://jdpqgfwzzxypjfhrtcsc.supabase.co/storage/v1/object/public/Next%20Act%20arbete/map%207%20punkter.svg"
-          alt="Programöversikt"
-          className="w-full"
-        />
-      </div>
+      {/* Interactive journey map */}
+      <JourneyMap steps={journeySteps} />
 
+      {/* Step list — fallback / extra detail */}
       <div className="flex flex-col gap-4">{moduleCards}</div>
     </div>
   );
