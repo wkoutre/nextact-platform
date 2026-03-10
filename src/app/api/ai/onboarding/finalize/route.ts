@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { generateObject } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { createAnthropic } from "@ai-sdk/anthropic";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -45,6 +45,11 @@ const profileSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    return NextResponse.json({ error: "AI not configured" }, { status: 503 });
+  }
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -71,7 +76,8 @@ export async function POST(request: Request) {
     );
   }
 
-  const model = anthropic(process.env.AI_MODEL ?? "claude-haiku-4-5-20251001");
+  const anthropicProvider = createAnthropic({ apiKey });
+  const model = anthropicProvider(process.env.AI_MODEL ?? "claude-haiku-4-5-20251001");
 
   let profileData;
   try {
@@ -85,7 +91,8 @@ Svara alltid på svenska för textfält.`,
       messages,
     });
     profileData = object;
-  } catch {
+  } catch (err) {
+    console.error("[finalize] generateObject error:", err);
     return NextResponse.json({ error: "Kunde inte tolka svaren. Försök igen." }, { status: 500 });
   }
 
