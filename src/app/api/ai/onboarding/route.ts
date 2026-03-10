@@ -56,19 +56,19 @@ export async function POST(request: Request) {
     });
   }
 
-  console.log("[onboarding] model:", process.env.AI_MODEL ?? "claude-haiku-4-5-20251001");
-  console.log("[onboarding] messages count:", messages.length);
-  console.log("[onboarding] first message role:", messages[0]?.role);
+  console.log("[onboarding] key prefix:", apiKey.slice(0, 10));
+  console.log("[onboarding] model:", process.env.AI_MODEL ?? "claude-3-5-haiku-20241022");
+  console.log("[onboarding] messages:", JSON.stringify(messages));
 
   const result = streamText({
-    model,
+    model: anthropicProvider(process.env.AI_MODEL ?? "claude-3-5-haiku-20241022"),
     system: ONBOARDING_SYSTEM_PROMPT,
     messages: messages.map((m) => ({
       role: m.role as "user" | "assistant",
       content: m.content,
     })),
     onError: ({ error }) => {
-      console.error("[onboarding] streamText error:", String(error));
+      console.error("[onboarding] streamText error:", JSON.stringify(error));
     },
   });
 
