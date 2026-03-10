@@ -102,10 +102,12 @@ export function OnboardingClient() {
       api: "/api/ai/onboarding",
       prepareSendMessagesRequest: ({ messages: uiMessages }) => ({
         body: {
-          messages: uiMessages.map((m) => ({
-            role: m.role,
-            content: getMessageText(m),
-          })),
+          messages: uiMessages
+            .slice(1) // skip initial static assistant greeting
+            .map((m) => ({
+              role: m.role,
+              content: getMessageText(m),
+            })),
         },
       }),
     }),
