@@ -184,7 +184,7 @@ export function OnboardingClient() {
       if (!response.ok) throw new Error("Finalize failed");
       router.push("/learn");
     } catch {
-      setPhase("error");
+      setPhase("naming");
       setErrorMessage("Det gick inte att spara din profil just nu. Prova igen.");
     }
   }, [characterName, messages, phase, router]);
@@ -262,6 +262,9 @@ export function OnboardingClient() {
               <p className="mt-1 font-body text-sm text-charcoal/60">
                 Det här är din alter ego i programmet — välj vad du vill.
               </p>
+              {errorMessage && (
+                <p className="mt-2 font-body text-sm text-red-600">{errorMessage}</p>
+              )}
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                 <input
                   type="text"
