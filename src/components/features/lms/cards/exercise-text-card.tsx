@@ -36,7 +36,7 @@ export function ExerciseTextCard({ prompt, placeholder, maxLength, onSubmit }: E
           <button
             onClick={handleSubmit}
             disabled={!value.trim()}
-            className="mt-4 rounded-full bg-primary px-6 py-2.5 font-heading text-sm font-bold text-white transition hover:bg-primary-hover disabled:opacity-40"
+            className="mt-4 w-full rounded-full bg-primary py-3.5 font-heading text-sm font-bold text-white transition hover:bg-primary-hover disabled:opacity-40"
           >
             Skicka svar
           </button>

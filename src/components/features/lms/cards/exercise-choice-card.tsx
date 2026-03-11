@@ -91,7 +91,7 @@ export function ExerciseChoiceCard({
           type="button"
           onClick={handleSubmit}
           disabled={selected.size === 0 || submitted}
-          className="self-end rounded-[3rem] bg-primary px-8 py-3 font-heading text-base font-semibold text-white shadow-sm shadow-primary/20 transition-all hover:bg-primary-hover disabled:opacity-50 disabled:pointer-events-none"
+          className="w-full rounded-full bg-primary py-3.5 font-heading text-sm font-semibold text-white transition-all hover:bg-primary-hover disabled:opacity-50 disabled:pointer-events-none"
         >
           {submitted ? "Skickat" : "Skicka"}
         </button>

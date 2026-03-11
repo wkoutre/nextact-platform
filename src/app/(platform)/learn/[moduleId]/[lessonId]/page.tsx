@@ -208,8 +208,6 @@ export default async function LessonPage({ params }: Props) {
   const lesson = lessonResult.data;
   if (!lesson) notFound();
 
-  const moduleName = moduleResult.data?.title ?? "";
-
   // Find next lesson
   const siblings = siblingsResult.data ?? [];
   const currentIndex = siblings.findIndex((s) => s.id === lessonId);
@@ -228,6 +226,9 @@ export default async function LessonPage({ params }: Props) {
     context_detail: characterResult.data?.context_detail ?? undefined,
   };
 
+  const moduleName = substituteTemplateVars(moduleResult.data?.title ?? "", templateVars);
+  const lessonTitle = substituteTemplateVars(lesson.title, templateVars);
+
   // Mark lesson as started
   await markLessonStarted(lessonId);
 
@@ -235,7 +236,7 @@ export default async function LessonPage({ params }: Props) {
   const blocks = parseContentBlocks(
     lesson.content,
     lessonId,
-    lesson.title,
+    lessonTitle,
     moduleId,
     nextLesson?.id ?? null,
     templateVars
@@ -247,7 +248,7 @@ export default async function LessonPage({ params }: Props) {
       lessonId={lessonId}
       moduleName={moduleName}
       moduleHref={`/learn/${moduleId}`}
-      lessonTitle={lesson.title}
+      lessonTitle={lessonTitle}
     />
   );
 }
