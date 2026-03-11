@@ -229,6 +229,31 @@ export default async function LessonPage({ params }: Props) {
   const moduleName = substituteTemplateVars(moduleResult.data?.title ?? "", templateVars);
   const lessonTitle = substituteTemplateVars(lesson.title, templateVars);
 
+  // If lesson has no content, show coming-soon screen
+  if (!Array.isArray(lesson.content) || lesson.content.length === 0) {
+    return (
+      <div className="flex min-h-dvh items-center justify-center bg-off-white p-6">
+        <div className="mx-auto flex max-w-sm flex-col items-center gap-6 text-center">
+          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 text-4xl">
+            🔒
+          </div>
+          <div>
+            <h2 className="font-heading text-2xl font-bold text-navy">Kommer snart</h2>
+            <p className="mt-2 font-body text-charcoal/70">
+              Det här steget håller på att skapas. Kom tillbaka snart!
+            </p>
+          </div>
+          <a
+            href="/learn"
+            className="rounded-full bg-primary px-8 py-3 font-heading text-sm font-semibold text-white transition-all hover:bg-primary-hover"
+          >
+            Tillbaka till resan
+          </a>
+        </div>
+      </div>
+    );
+  }
+
   // Mark lesson as started
   await markLessonStarted(lessonId);
 
