@@ -15,13 +15,13 @@ type Step = {
 // Hotspot positions as percentages of the image dimensions.
 // Measured from the numbered circles in NextAct_kartan.png.
 const HOTSPOT_POSITIONS: Record<number, { x: number; y: number }> = {
-  1: { x: 8.2, y: 22 },
-  2: { x: 12.5, y: 59 },
-  3: { x: 37, y: 54 },
-  4: { x: 53, y: 16 },
-  5: { x: 47, y: 73 },
-  6: { x: 66, y: 59 },
-  7: { x: 86, y: 21 },
+  1: { x: 5.5, y: 30 },
+  2: { x: 11,  y: 65 },
+  3: { x: 36.5, y: 57 },
+  4: { x: 52,  y: 17 },
+  5: { x: 47,  y: 77 },
+  6: { x: 66,  y: 64 },
+  7: { x: 86,  y: 26 },
 };
 
 function Hotspot({ step, onClick }: { step: Step; onClick: () => void }) {
