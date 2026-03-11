@@ -70,12 +70,15 @@ function parseContentBlocks(
       case "exercise_choice":
         blocks.push({
           type: "exercise_choice",
-          question: substituteTemplateVars(String(b.question ?? ""), templateVars),
+          question: substituteTemplateVars(String(b.question ?? b.title ?? ""), templateVars),
           options: Array.isArray(b.options)
-            ? b.options.map((o: unknown) => {
+            ? b.options.map((o: unknown, idx: number) => {
+                if (typeof o === "string") {
+                  return { id: String(idx), label: substituteTemplateVars(o, templateVars) };
+                }
                 const opt = o as Record<string, unknown>;
                 return {
-                  id: String(opt.id ?? ""),
+                  id: String(opt.id ?? idx),
                   label: substituteTemplateVars(String(opt.label ?? ""), templateVars),
                 };
               })
