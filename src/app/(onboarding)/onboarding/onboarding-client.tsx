@@ -203,7 +203,7 @@ export function OnboardingClient() {
             Next Act
           </span>
           <span className="font-body text-xs text-charcoal/50">
-            Steg 1 av 1: Skapa din karaktär
+            Lär oss känna dig
           </span>
         </div>
       </header>
@@ -257,10 +257,10 @@ export function OnboardingClient() {
           {phase === "naming" && (
             <div className="mt-4 rounded-2xl border border-navy/8 bg-off-white px-6 py-7">
               <h2 className="font-heading text-base font-bold text-navy">
-                Ge din karaktär ett namn
+                Vad heter du?
               </h2>
               <p className="mt-1 font-body text-sm text-charcoal/60">
-                Det här är din alter ego i programmet — välj vad du vill.
+                Vi använder ditt namn för att personalisera programmet.
               </p>
               {errorMessage && (
                 <p className="mt-2 font-body text-sm text-red-600">{errorMessage}</p>
@@ -273,7 +273,7 @@ export function OnboardingClient() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter") void handleFinalize();
                   }}
-                  placeholder="T.ex. Järnviljaren, Maja..."
+                  placeholder="Ditt förnamn..."
                   autoFocus
                   maxLength={60}
                   className="flex-1 rounded-xl border border-navy/15 bg-white px-4 py-3 font-body text-sm text-charcoal placeholder:text-charcoal/35 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
@@ -283,7 +283,7 @@ export function OnboardingClient() {
                   disabled={!characterName.trim()}
                   className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 font-heading text-sm font-semibold text-white transition-all hover:-translate-y-px hover:bg-primary-hover hover:shadow-md disabled:pointer-events-none disabled:opacity-40"
                 >
-                  Starta mitt program →
+                  Kom igång →
                 </button>
               </div>
             </div>
