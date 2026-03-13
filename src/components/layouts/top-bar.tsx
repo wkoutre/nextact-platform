@@ -5,10 +5,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 
 const NAV_ITEMS = [
-  { href: "/dashboard", label: "Hem" },
-  { href: "/learn", label: "Program" },
-  { href: "/coach", label: "Ditt mentala bollplank" },
-  { href: "/progress", label: "Framsteg" },
+  { href: "/learn", label: "Resa" },
   { href: "/profile", label: "Profil" },
 ];
 
@@ -56,18 +53,19 @@ export function TopBar({ userName }: TopBarProps) {
 
         {/* Center: logo / brand */}
         <Link
-          href="/dashboard"
+          href="/learn"
           className="font-heading text-base font-bold text-navy"
         >
           Next Act
         </Link>
 
-        {/* Right: bollplank link */}
+        {/* Right: profile link */}
         <Link
-          href="/coach"
-          className="text-sm font-medium text-primary hover:underline"
+          href="/profile"
+          aria-label="Profil"
+          className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary transition-colors hover:bg-primary/20"
         >
-          Ditt mentala bollplank
+          {userName ? userName[0].toUpperCase() : "?"}
         </Link>
       </div>
 
