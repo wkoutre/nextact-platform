@@ -140,16 +140,16 @@ export function ExerciseTextCard({
             </div>
             <div className="mt-4 flex flex-col gap-2">
               <button
-                onClick={handleRevise}
+                onClick={() => setStatus("done")}
                 className="w-full rounded-full bg-primary py-3.5 font-heading text-sm font-bold text-white transition hover:bg-primary-hover"
               >
-                Ändra mitt svar
+                Fortsätt
               </button>
               <button
-                onClick={() => setStatus("done")}
+                onClick={handleRevise}
                 className="w-full py-2 text-sm text-charcoal/60 transition hover:text-charcoal"
               >
-                Fortsätt ändå
+                Ändra mitt svar
               </button>
             </div>
           </>
