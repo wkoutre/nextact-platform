@@ -8,7 +8,7 @@ import { ONBOARDING_INITIAL_MESSAGE } from "@/lib/services/ai/onboarding-prompt"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type Phase = "conversation" | "naming" | "submitting" | "error";
+type Phase = "conversation" | "submitting" | "error";
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -93,7 +93,6 @@ export function OnboardingClient() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [phase, setPhase] = useState<Phase>("conversation");
-  const [characterName, setCharacterName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [input, setInput] = useState("");
 
@@ -120,7 +119,7 @@ export function OnboardingClient() {
     ],
     onFinish: ({ message }) => {
       if (hasProfilKlar(getMessageText(message))) {
-        setPhase("naming");
+        void handleFinalize(getMessageText(message));
       }
     },
     onError: (err) => {
@@ -164,30 +163,27 @@ export function OnboardingClient() {
     [input, isStreaming, phase, sendMessage],
   );
 
-  const handleFinalize = useCallback(async () => {
-    const name = characterName.trim();
-    if (!name || phase !== "naming") return;
-
+  const handleFinalize = useCallback(async (lastMessage?: string) => {
     setPhase("submitting");
 
-    const apiMessages = messages
-      .slice(1) // skip initial static message
-      .map((m) => ({ role: m.role, content: getMessageText(m) }));
+    const allMessages = lastMessage
+      ? messages.slice(1).map((m) => ({ role: m.role, content: getMessageText(m) }))
+      : messages.slice(1).map((m) => ({ role: m.role, content: getMessageText(m) }));
 
     try {
       const response = await fetch("/api/ai/onboarding/finalize", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: apiMessages, characterName: name }),
+        body: JSON.stringify({ messages: allMessages }),
       });
 
       if (!response.ok) throw new Error("Finalize failed");
       router.push("/learn");
     } catch {
-      setPhase("naming");
+      setPhase("conversation");
       setErrorMessage("Det gick inte att spara din profil just nu. Prova igen.");
     }
-  }, [characterName, messages, phase, router]);
+  }, [messages, router]);
 
   const lastAssistantIndex = messages
     .map((m, i) => (m.role === "assistant" ? i : -1))
@@ -253,41 +249,6 @@ export function OnboardingClient() {
             </div>
           )}
 
-          {/* ── Character naming card ─────────────────────────── */}
-          {phase === "naming" && (
-            <div className="mt-4 rounded-2xl border border-navy/8 bg-off-white px-6 py-7">
-              <h2 className="font-heading text-base font-bold text-navy">
-                Vad heter du?
-              </h2>
-              <p className="mt-1 font-body text-sm text-charcoal/60">
-                Vi använder ditt namn för att personalisera programmet.
-              </p>
-              {errorMessage && (
-                <p className="mt-2 font-body text-sm text-red-600">{errorMessage}</p>
-              )}
-              <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-                <input
-                  type="text"
-                  value={characterName}
-                  onChange={(e) => setCharacterName(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") void handleFinalize();
-                  }}
-                  placeholder="Ditt förnamn..."
-                  autoFocus
-                  maxLength={60}
-                  className="flex-1 rounded-xl border border-navy/15 bg-white px-4 py-3 font-body text-sm text-charcoal placeholder:text-charcoal/35 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                />
-                <button
-                  onClick={() => void handleFinalize()}
-                  disabled={!characterName.trim()}
-                  className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 font-heading text-sm font-semibold text-white transition-all hover:-translate-y-px hover:bg-primary-hover hover:shadow-md disabled:pointer-events-none disabled:opacity-40"
-                >
-                  Kom igång →
-                </button>
-              </div>
-            </div>
-          )}
 
           {/* ── Submitting state ──────────────────────────────── */}
           {phase === "submitting" && (
@@ -302,7 +263,7 @@ export function OnboardingClient() {
       </div>
 
       {/* ── Sticky input bar ────────────────────────────────────── */}
-      {(phase === "conversation" || phase === "error") && (
+      {phase === "conversation" && (
         <div className="flex-none border-t border-navy/8 bg-white px-5 py-4 sm:px-8">
           <div className="mx-auto max-w-2xl">
             <form onSubmit={handleFormSubmit} className="flex gap-3">

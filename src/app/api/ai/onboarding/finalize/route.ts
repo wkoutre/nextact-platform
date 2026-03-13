@@ -63,18 +63,16 @@ export async function POST(request: Request) {
   const body = await request.json();
   const messages: Array<{ role: "user" | "assistant"; content: string }> =
     body.messages;
-  const characterName: string = body.characterName;
 
   if (!Array.isArray(messages) || messages.length === 0) {
     return NextResponse.json({ error: "Messages required" }, { status: 400 });
   }
 
-  if (!characterName || typeof characterName !== "string") {
-    return NextResponse.json(
-      { error: "characterName required" },
-      { status: 400 }
-    );
-  }
+  // Use the account's display name instead of a separate character name
+  const characterName =
+    user.user_metadata?.display_name ??
+    user.email?.split("@")[0] ??
+    "Idrottare";
 
   const anthropicProvider = createAnthropic({ apiKey });
   const model = anthropicProvider(process.env.AI_MODEL ?? "claude-haiku-4-5-20251001");
